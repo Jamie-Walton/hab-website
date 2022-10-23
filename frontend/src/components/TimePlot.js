@@ -1,6 +1,5 @@
 import React from "react";
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Label } from 'recharts';
-import saveSvgAsPng from 'save-svg-as-png'
 
 class TimePlot extends React.Component {
   
