@@ -84,7 +84,7 @@ class TotalPlot extends React.Component {
                     cursor={{ fill: 'rgba(206, 206, 206, 0.3)' }}
                         />
                 <Legend layout="vertical" verticalAlign="top" align="right" wrapperStyle={{margin:'0 -20px'}} />
-                <Bar dataKey="below" name="Below Threshold" stackId="a" fill="#D9D9D9" />
+                <Bar dataKey="below" name="Below Threshold" stackId="a" fill="#d7d5dd" />
                 <Bar dataKey="above" name="Above Threshold" stackId="a" fill="#2458DE" />
             </BarChart>
         );

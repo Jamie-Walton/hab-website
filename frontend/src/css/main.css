@@ -37,6 +37,7 @@ h3 {
     font-size: 15px;
     font-weight: 200;
     margin: 7px 0 25px;
+    color: #787785;
 }
 
 h4 {
@@ -50,6 +51,7 @@ p {
     font-family: proxima-nova, sans-serif;
     font-size: 15px;
     font-weight: 200;
+    color: #787785;
 }
 
 .subheading {
@@ -70,8 +72,25 @@ p {
     width: fit-content;
 }
 
+.page-title {
+    color: #2458DE;
+}
+
+.day-arrow {
+    cursor: pointer
+}
+
+.day-arrow:hover {
+    color: #2458DE;
+}
+
+.plot-title {
+    font-size: 18px;
+    margin: 50px 0 30px;
+}
+
 .daily-plot {
-    margin:
+    margin: 30px
 }
 
 text {
@@ -99,4 +118,44 @@ line {
 
 .desc {
     margin: 0;
+}
+
+.filter-label {
+    font-size: 12px;
+    font-style: italic;
+    color: #787785;
+    font-weight: 600;
+}
+
+li {
+    font-family: proxima-nova, sans-serif;
+    font-size: 12px;
+    font-weight: 200;
+    list-style-type: none;
+    color: #787785;
+}
+
+.recharts-legend-item:hover {
+    color: #2458DE;
+}
+
+.unfilter-button {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #FFFFFF;
+    background-color: #a7a5b6;
+    border-radius: 15px;
+    padding: 4px 12px;
+    text-align: center;
+    margin-top: 20px;
+    width: fit-content;
+}
+
+.unfilter-button:hover {
+    background-color: #2458DE;
+}
+
+.recharts-label {
+    font-weight: 600;
 }
