@@ -1,5 +1,6 @@
 import React from "react";
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Label } from 'recharts';
+import domtoimage from 'dom-to-image';
 
 class TimePlot extends React.Component {
   
@@ -31,6 +32,20 @@ class TimePlot extends React.Component {
         })
     }
 
+    downloadImage(){
+        var node = document.getElementById('plot');
+        domtoimage.toPng(node, { bgcolor: '#FFFFFF' })
+            .then(function (dataUrl) {
+                var link = document.createElement('a');
+                link.download = 'CellCounts.png';
+                link.href = dataUrl;
+                link.click();
+            })
+            .catch(function (error) {
+                console.error('oops, something went wrong!', error);
+            });
+      }
+
     render() {
 
         const renderLegend = (props) => {
@@ -60,35 +75,38 @@ class TimePlot extends React.Component {
 
         return (
             <div>
-                <LineChart width={700} height={350} data={this.state.data} ref={(chart) => this.currentChart = chart}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" height={50} label={{ value: 'Time', position: 'insideBottom' }}>
-                    </XAxis>
-                    <YAxis label={{ value: 'Cell Count (c/L)', angle: -90, position: 'insideLeft' }} />
-                    <Legend 
-                        content={renderLegend}
-                        layout="vertical" 
-                        verticalAlign="top" 
-                        align="right" 
-                        wrapperStyle={{margin:'0 -20px', cursor: 'pointer'}} 
-                        iconType="rect" 
-                        onClick={(label) => this.filterFor(label.dataKey)}>
-                    </Legend>
-                    <Line type="monotone" className="line" id="Akashiwo" dataKey="Akashiwo" stroke="#3c32a8" strokeWidth={2} />
-                    <Line type="monotone" className="line" id="Alexandrium" dataKey="Alexandrium" stroke="#3252a8" strokeWidth={2}/>
-                    <Line type="monotone" className="line" id="Ceratium" dataKey="Ceratium" stroke="#3275a8" strokeWidth={2}/>
-                    <Line type="monotone" className="line" id="Dinophysis" dataKey="Dinophysis" stroke="#3299a8" strokeWidth={2}/>
-                    <Line type="monotone" className="line" id="Cochlodinium" dataKey="Cochlodinium" stroke="#32a88d" strokeWidth={2}/>
-                    <Line type="monotone" className="line" id="Lingulodinium" dataKey="Lingulodinium" stroke="#32a869" strokeWidth={2}/>
-                    <Line type="monotone" className="line" id="Prorocentrum" dataKey="Prorocentrum" stroke="#36a832" strokeWidth={2}/>
-                    <Line type="monotone" className="line" id="Pseudo-Nitzschia" dataKey="Pseudo-Nitzschia" stroke="#6da832" strokeWidth={2}/>
-                    <Line type="monotone" className="line" id="Pennate" dataKey="Pennate" stroke="#99a832" strokeWidth={2}/>
-                    {
-                        this.state.showThreshold ?
-                        <Line type="monotone" className="line" id="Threshold" dataKey="Threshold" name="Warning Threshold" stroke="#ba261c" strokeWidth={2} dot={false}/> :
-                        <div/>
-                    }
-                </LineChart>
+                <div className="download-button" onClick={() => this.downloadImage()}>Download</div>
+                <div id="plot">
+                    <LineChart width={700} height={350} data={this.state.data} ref={(chart) => this.currentChart = chart}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="name" height={50} label={{ value: 'Time', position: 'insideBottom' }}>
+                        </XAxis>
+                        <YAxis label={{ value: 'Cell Count (c/L)', angle: -90, position: 'insideLeft' }} />
+                        <Legend 
+                            content={renderLegend}
+                            layout="vertical" 
+                            verticalAlign="top" 
+                            align="right" 
+                            wrapperStyle={{margin:'0 -20px', cursor: 'pointer'}} 
+                            iconType="rect" 
+                            onClick={(label) => this.filterFor(label.dataKey)}>
+                        </Legend>
+                        <Line type="monotone" className="line" id="Akashiwo" dataKey="Akashiwo" stroke="#3c32a8" strokeWidth={2} />
+                        <Line type="monotone" className="line" id="Alexandrium" dataKey="Alexandrium" stroke="#3252a8" strokeWidth={2}/>
+                        <Line type="monotone" className="line" id="Ceratium" dataKey="Ceratium" stroke="#3275a8" strokeWidth={2}/>
+                        <Line type="monotone" className="line" id="Dinophysis" dataKey="Dinophysis" stroke="#3299a8" strokeWidth={2}/>
+                        <Line type="monotone" className="line" id="Cochlodinium" dataKey="Cochlodinium" stroke="#32a88d" strokeWidth={2}/>
+                        <Line type="monotone" className="line" id="Lingulodinium" dataKey="Lingulodinium" stroke="#32a869" strokeWidth={2}/>
+                        <Line type="monotone" className="line" id="Prorocentrum" dataKey="Prorocentrum" stroke="#36a832" strokeWidth={2}/>
+                        <Line type="monotone" className="line" id="Pseudo-Nitzschia" dataKey="Pseudo-Nitzschia" stroke="#6da832" strokeWidth={2}/>
+                        <Line type="monotone" className="line" id="Pennate" dataKey="Pennate" stroke="#99a832" strokeWidth={2}/>
+                        {
+                            this.state.showThreshold ?
+                            <Line type="monotone" className="line" id="Threshold" dataKey="Threshold" name="Warning Threshold" stroke="#ba261c" strokeWidth={2} dot={false}/> :
+                            <div/>
+                        }
+                    </LineChart>
+                </div>
             </div>
         );
     }
