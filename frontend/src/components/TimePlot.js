@@ -98,7 +98,7 @@ class TimePlot extends React.Component {
         const renderLegend = (props) => {
             var { payload } = props;
             if (this.state.filtered) {
-                payload = payload.filter(c => c.payload.id == this.state.filtered || c.payload.id == 'Threshold');
+                payload = payload.filter(c => c.payload.id === this.state.filtered || c.payload.id === 'Threshold');
             }
           
             return (
@@ -142,13 +142,13 @@ class TimePlot extends React.Component {
                             onClick={(label) => this.filterFor(label.dataKey)}>
                         </Legend>
                         <Line type="monotone" className="line" id="Akashiwo" dataKey="Akashiwo" stroke={this.state.colors.Akashiwo} strokeWidth={2} />
-                        <Line type="monotone" className="line" id="Alexandrium" dataKey="Alexandrium" stroke={this.state.colors.Alexandrium} strokeWidth={2}/>
+                        <Line type="monotone" className="line" id="Alexandrium" dataKey="Alexandrium_singlet" stroke={this.state.colors.Alexandrium} strokeWidth={2}/>
                         <Line type="monotone" className="line" id="Ceratium" dataKey="Ceratium" stroke={this.state.colors.Ceratium} strokeWidth={2}/>
                         <Line type="monotone" className="line" id="Dinophysis" dataKey="Dinophysis" stroke={this.state.colors.Dinophysis} strokeWidth={2}/>
                         <Line type="monotone" className="line" id="Cochlodinium" dataKey="Cochlodinium" stroke={this.state.colors.Cochlodinium} strokeWidth={2}/>
                         <Line type="monotone" className="line" id="Lingulodinium" dataKey="Lingulodinium" stroke={this.state.colors.Lingulodinium} strokeWidth={2}/>
                         <Line type="monotone" className="line" id="Prorocentrum" dataKey="Prorocentrum" stroke={this.state.colors.Prorocentrum} strokeWidth={2}/>
-                        <Line type="monotone" className="line" id="Pseudo-Nitzschia" dataKey="Pseudo-Nitzschia" stroke={this.state.colors.PseudoNitzschia} strokeWidth={2}/>
+                        <Line type="monotone" className="line" id="Pseudo-Nitzschia" dataKey="Pseudo-nitzschia" stroke={this.state.colors.PseudoNitzschia} strokeWidth={2}/>
                         <Line type="monotone" className="line" id="Pennate" dataKey="Pennate" stroke={this.state.colors.Pennate} strokeWidth={2}/>
                         {
                             this.state.showThreshold ?

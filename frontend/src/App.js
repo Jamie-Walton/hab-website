@@ -1,6 +1,6 @@
 import './css/main.css';
-import TotalPlot from './components/TotalPlot'
-import TimePlot from './components/TimePlot'
+import axios from "axios";
+import Page from './components/Page';
 
 function App() {
 
@@ -88,25 +88,7 @@ function App() {
           Keep track of the harmful algae blooms at the Santa Wharf in California.
         </h3>
       </div>
-      <div className="page">
-        <h4 className="page-title">Daily HAB Cell Counts</h4>
-        <div style={{display:"flex"}}>
-          <h3 className="day-arrow" style={{paddingRight: '10px'}}>{'<'}</h3>
-          <h3>October 15, 2022</h3>
-          <h3 className="day-arrow" style={{paddingLeft: '10px'}}>{'>'}</h3>
-        </div>
-      <div className="daily-plot">
-          <h4 className="plot-title">Cell Counts Throughout the Day</h4>
-          <TimePlot 
-            counts={counts}
-            thresholds={thresholds}
-          />
-        </div>
-        <div className="daily-plot">
-          <h4 className="plot-title">Total Cell Counts</h4>
-          <TotalPlot/>
-        </div>
-      </div>
+      {<Page/>}
     </main>
   );
 }
