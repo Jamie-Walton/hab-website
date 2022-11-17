@@ -1,6 +1,8 @@
 import React from "react";
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Label } from 'recharts';
-import domtoimage from 'dom-to-image';
+import domtoimage from 'dom-to-image-improved';
+import rd3 from 'react-d3-library';
+import d3 from "react-d3-library";
 
 class TimePlot extends React.Component {
   
@@ -9,7 +11,20 @@ class TimePlot extends React.Component {
       this.state = {
           data: [],
           counts: [],
+          colors: {
+              Akashiwo: '#3c32a8',
+              Alexandrium: '#3252a8',
+              Ceratium: '#3275a8',
+              Dinophysis: '#3299a8',
+              Cochlodinium: '#32a88d',
+              Lingulodinium: '#32a869',
+              Prorocentrum: '#36a832',
+              PseudoNitzschia: '#6da832',
+              Pennate: '#99a832',
+              Threshold: '#ba261c',
+          },
           showThreshold: false,
+          filtered: '',
       }
     }
 
@@ -22,6 +37,7 @@ class TimePlot extends React.Component {
         this.setState({ 
             data: data,
             showThreshold: true,
+            filtered: species,
          });
     }
 
@@ -29,6 +45,7 @@ class TimePlot extends React.Component {
         this.setState({ 
             data: this.props.counts,
             showThreshold: false,
+            filtered: '',
         })
     }
 
@@ -46,10 +63,43 @@ class TimePlot extends React.Component {
             });
       }
 
+      renderLegendItemSVG(name, y) {
+        return (
+            <svg>
+                <svg width="14" height="14" y={y-11} viewBox="0 0 32 32" version="1.1" style={{display: "inlineBlock", verticalAlign: "middle", marginRight: "8px"}}>
+                    <title></title>
+                    <desc></desc>
+                    <path stroke="none" fill={this.state.colors[name]} d="M0,4h32v24h-32z" className="recharts-legend-icon"></path>
+                </svg>
+                <text x="20" y={y}>{name}</text>
+            </svg>
+        )
+      }
+
+      renderLegendSVG() {
+        return (
+            <svg>
+                {this.renderLegendItemSVG('Akashiwo', 10)}
+                {this.renderLegendItemSVG('Alexandrium', 28)}
+                {this.renderLegendItemSVG('Ceratium', 46)}
+                {this.renderLegendItemSVG('Dinophysis', 64)}
+                {this.renderLegendItemSVG('Cochlodinium', 82)}
+                {this.renderLegendItemSVG('Lingulodinium', 100)}
+                {this.renderLegendItemSVG('Prorocentrum', 118)}
+                {this.renderLegendItemSVG('PseudoNitzschia', 136)}
+                {this.renderLegendItemSVG('Pennate', 154)}
+                {this.renderLegendItemSVG('Threshold', 172)}
+            </svg>
+        );
+      }
+
     render() {
 
         const renderLegend = (props) => {
-            const { payload } = props;
+            var { payload } = props;
+            if (this.state.filtered) {
+                payload = payload.filter(c => c.payload.id == this.state.filtered || c.payload.id == 'Threshold');
+            }
           
             return (
             <div>
@@ -91,18 +141,18 @@ class TimePlot extends React.Component {
                             iconType="rect" 
                             onClick={(label) => this.filterFor(label.dataKey)}>
                         </Legend>
-                        <Line type="monotone" className="line" id="Akashiwo" dataKey="Akashiwo" stroke="#3c32a8" strokeWidth={2} />
-                        <Line type="monotone" className="line" id="Alexandrium" dataKey="Alexandrium" stroke="#3252a8" strokeWidth={2}/>
-                        <Line type="monotone" className="line" id="Ceratium" dataKey="Ceratium" stroke="#3275a8" strokeWidth={2}/>
-                        <Line type="monotone" className="line" id="Dinophysis" dataKey="Dinophysis" stroke="#3299a8" strokeWidth={2}/>
-                        <Line type="monotone" className="line" id="Cochlodinium" dataKey="Cochlodinium" stroke="#32a88d" strokeWidth={2}/>
-                        <Line type="monotone" className="line" id="Lingulodinium" dataKey="Lingulodinium" stroke="#32a869" strokeWidth={2}/>
-                        <Line type="monotone" className="line" id="Prorocentrum" dataKey="Prorocentrum" stroke="#36a832" strokeWidth={2}/>
-                        <Line type="monotone" className="line" id="Pseudo-Nitzschia" dataKey="Pseudo-Nitzschia" stroke="#6da832" strokeWidth={2}/>
-                        <Line type="monotone" className="line" id="Pennate" dataKey="Pennate" stroke="#99a832" strokeWidth={2}/>
+                        <Line type="monotone" className="line" id="Akashiwo" dataKey="Akashiwo" stroke={this.state.colors.Akashiwo} strokeWidth={2} />
+                        <Line type="monotone" className="line" id="Alexandrium" dataKey="Alexandrium" stroke={this.state.colors.Alexandrium} strokeWidth={2}/>
+                        <Line type="monotone" className="line" id="Ceratium" dataKey="Ceratium" stroke={this.state.colors.Ceratium} strokeWidth={2}/>
+                        <Line type="monotone" className="line" id="Dinophysis" dataKey="Dinophysis" stroke={this.state.colors.Dinophysis} strokeWidth={2}/>
+                        <Line type="monotone" className="line" id="Cochlodinium" dataKey="Cochlodinium" stroke={this.state.colors.Cochlodinium} strokeWidth={2}/>
+                        <Line type="monotone" className="line" id="Lingulodinium" dataKey="Lingulodinium" stroke={this.state.colors.Lingulodinium} strokeWidth={2}/>
+                        <Line type="monotone" className="line" id="Prorocentrum" dataKey="Prorocentrum" stroke={this.state.colors.Prorocentrum} strokeWidth={2}/>
+                        <Line type="monotone" className="line" id="Pseudo-Nitzschia" dataKey="Pseudo-Nitzschia" stroke={this.state.colors.PseudoNitzschia} strokeWidth={2}/>
+                        <Line type="monotone" className="line" id="Pennate" dataKey="Pennate" stroke={this.state.colors.Pennate} strokeWidth={2}/>
                         {
                             this.state.showThreshold ?
-                            <Line type="monotone" className="line" id="Threshold" dataKey="Threshold" name="Warning Threshold" stroke="#ba261c" strokeWidth={2} dot={false}/> :
+                            <Line type="monotone" className="line" id="Threshold" dataKey="Threshold" name="Warning Threshold" stroke={this.state.colors.Threshold} strokeWidth={2} dot={false}/> :
                             <div/>
                         }
                     </LineChart>

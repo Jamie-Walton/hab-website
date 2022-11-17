@@ -118,6 +118,7 @@ line {
 
 .desc {
     margin: 0;
+    font-size: 11px;
 }
 
 .filter-label {
@@ -173,4 +174,8 @@ li {
     text-transform: uppercase;
     letter-spacing: 1px;
     cursor: pointer;
+}
+
+.download-button:hover {
+    background-color: #a7a5b6;
 }
