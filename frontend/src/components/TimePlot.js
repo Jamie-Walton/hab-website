@@ -12,16 +12,16 @@ class TimePlot extends React.Component {
           data: [],
           counts: [],
           colors: {
-              Akashiwo: '#3c32a8',
-              Alexandrium: '#3252a8',
-              Ceratium: '#3275a8',
-              Dinophysis: '#3299a8',
-              Cochlodinium: '#32a88d',
-              Lingulodinium: '#32a869',
-              Prorocentrum: '#36a832',
-              PseudoNitzschia: '#6da832',
-              Pennate: '#99a832',
-              Threshold: '#ba261c',
+              Akashiwo: '#9bad10',
+              Alexandrium: '#51ad10',
+              Ceratium: '#10ad1a',
+              Dinophysis: '#10ad79',
+              Cochlodinium: '#10adab',
+              Lingulodinium: '#106cad',
+              Prorocentrum: '#1034ad',
+              PseudoNitzschia: '#6910ad',
+              Pennate: '#8e10ad',
+              Threshold: '#ad10a6',
           },
           showThreshold: false,
           filtered: '',
@@ -131,7 +131,7 @@ class TimePlot extends React.Component {
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="name" height={50} label={{ value: 'Time', position: 'insideBottom' }}>
                         </XAxis>
-                        <YAxis label={{ value: 'Cell Count (c/L)', angle: -90, position: 'insideLeft' }} />
+                        <YAxis label={{ value: 'Cell Count (c/mL)', angle: -90, position: 'insideLeft' }} />
                         <Legend 
                             content={renderLegend}
                             layout="vertical" 

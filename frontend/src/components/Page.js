@@ -16,7 +16,17 @@ class Page extends React.Component {
         axios
            .get('/load/')
            .then((res) => {
-               this.setState({counts: res.data.counts});
+               const counts = res.data.counts;
+               if (res.data.empties) {
+                for (let i = 0; i < counts.length; i++) {
+                    Object.keys(counts[i]).forEach((key, index) => {
+                        if (counts[i][key] === 0) {
+                            counts[i][key] = null;
+                        }
+                    })
+                }
+               }
+               this.setState({counts: counts});
 
             })
            .catch((err) => console.log(err));
@@ -24,16 +34,16 @@ class Page extends React.Component {
 
     render() {
         const thresholds = {
-            "Akashiwo": 500,
-            "Alexandrium": 10000,
-            "Ceratium": 10000,
-            "Dinophysis": 10000,
-            "Cochlodinium": 10000,
-            "Lingulodinium": 10000,
-            "Prorocentrum": 10000,
-            "Pseudo-Nitzschia": 10000,
-            "Pennate": 10000,
-        }
+            "Akashiwo": 100,
+            "Alexandrium": 100,
+            "Ceratium": 100,
+            "Dinophysis": 0.5,
+            "Cochlodinium": 100,
+            "Lingulodinium": 100,
+            "Prorocentrum": 100,
+            "Pseudo-Nitzschia": 100,
+            "Pennate": 100,
+        };
         return(
             <div className="page">
                 <h4 className="page-title">Daily HAB Cell Counts</h4>

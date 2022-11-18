@@ -92,7 +92,7 @@ class TotalPlot extends React.Component {
                         <XAxis dataKey="name" angle={-25} textAnchor="end" height={50} allowDataOverFlow={true} minTickGap={-20}>
                             <Label value="HAB Species" offset={-30} position="insideBottom" />
                         </XAxis>
-                        <YAxis label={{ value: 'Cell Count (c/L)', angle: -90, position: 'insideLeft' }} />
+                        <YAxis label={{ value: 'Cell Count (c/mL)', angle: -90, position: 'insideLeft' }} />
                         <Tooltip 
                             content={<CustomTooltip />} 
                             itemStyle={{backgroundColor:'#FFFFFF', color:'#777777'}} 
