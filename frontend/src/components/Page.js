@@ -9,27 +9,54 @@ class Page extends React.Component {
       super(props);
       this.state = {
           counts: [],
+          week: 1,
+          weekName: "",
+          timekey: 1,
       }
     }
 
-    componentDidMount() {
-        axios
-           .get('/load/')
-           .then((res) => {
-               const counts = res.data.counts;
-               if (res.data.empties) {
-                for (let i = 0; i < counts.length; i++) {
-                    Object.keys(counts[i]).forEach((key, index) => {
-                        if (counts[i][key] === 0) {
-                            counts[i][key] = null;
+    loadData(week) {
+        try {
+            axios
+                .get('/load/' + week +'/')
+                .then((res) => {
+                    const counts = res.data.counts;
+                    if (res.data.empties) {
+                        console.log(res.data.empties);
+                        for (let i = 0; i < counts.length; i++) {
+                            Object.keys(counts[i]).forEach((key, index) => {
+                                if (counts[i][key] === 0) {
+                                    counts[i][key] = null;
+                                }
+                            })
                         }
-                    })
-                }
-               }
-               this.setState({counts: counts});
+                    }
+                    this.setState({
+                        counts: counts,
+                        weekName: `${counts[0].name} to ${counts[6].name}`,
+                        timekey: this.state.timekey + 1,
+                        });
 
-            })
-           .catch((err) => console.log(err));
+                    });
+        } catch {
+            console.log();
+        }
+    }
+    
+    componentDidMount() {
+        this.loadData(this.state.week);
+    }
+
+    back() {
+        this.loadData(this.state.week+1);
+        this.setState({ week: this.state.week+1 });
+    }
+
+    next() {
+        if (this.state.week > 1) {
+            this.loadData(this.state.week-1);
+            this.setState({ week: this.state.week-1 });
+        }
     }
 
     render() {
@@ -46,18 +73,19 @@ class Page extends React.Component {
         };
         return(
             <div className="page">
-                <h4 className="page-title">Daily HAB Cell Counts</h4>
+                <h4 className="page-title">Weekly HAB Cell Counts</h4>
                 <div style={{display:"flex"}}>
-                <h3 className="day-arrow" style={{paddingRight: '10px'}}>{'<'}</h3>
-                <h3>October 15, 2022</h3>
-                <h3 className="day-arrow" style={{paddingLeft: '10px'}}>{'>'}</h3>
+                <h3 className="day-arrow" onClick={() => this.back()} style={{paddingRight: '10px'}}>{'<'}</h3>
+                <h3>{this.state.weekName}</h3>
+                <h3 className="day-arrow" onClick={() => this.next()} style={{paddingLeft: '10px'}}>{'>'}</h3>
                 </div>
             <div className="daily-plot">
-                <h4 className="plot-title">Cell Counts Throughout the Day</h4>
+                <h4 className="plot-title">Cell Counts by Day</h4>
                 {(this.state.counts) ?
                 <TimePlot 
                     counts={this.state.counts}
                     thresholds={thresholds}
+                    key={this.state.timekey}
                 /> : <div/> }
                 </div>
                 <div className="daily-plot">

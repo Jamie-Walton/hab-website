@@ -1,8 +1,7 @@
 import React from "react";
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Label } from 'recharts';
 import domtoimage from 'dom-to-image-improved';
-import rd3 from 'react-d3-library';
-import d3 from "react-d3-library";
+import ClassPlot from "./ClassPlot";
 
 class TimePlot extends React.Component {
   
@@ -10,7 +9,7 @@ class TimePlot extends React.Component {
       super(props);
       this.state = {
           data: [],
-          counts: [],
+          key: 1,
           colors: {
               Akashiwo: '#9bad10',
               Alexandrium: '#51ad10',
@@ -25,11 +24,14 @@ class TimePlot extends React.Component {
           },
           showThreshold: false,
           filtered: '',
+          showIndividuals: false,
       }
     }
 
     componentDidMount() {
-        this.setState({ data: this.props.counts });
+        this.setState({ 
+            data: this.props.counts,
+        });
     }
 
     filterFor(species) {
@@ -93,8 +95,12 @@ class TimePlot extends React.Component {
         );
       }
 
-    render() {
+    toggleIndividuals() {
+        this.setState({ showIndividuals: !this.state.showIndividuals });
+    }
 
+    render() {
+        
         const renderLegend = (props) => {
             var { payload } = props;
             if (this.state.filtered) {
@@ -119,6 +125,7 @@ class TimePlot extends React.Component {
                     }
                 </ul>
                 {this.state.showThreshold ? <p className="unfilter-button" onClick={() => this.unFilter()}>{'<    Back to All'}</p> : <div/>}
+                <div className="download-button" style={{marginTop: '20px'}} onClick={() => this.toggleIndividuals()}>{this.state.showIndividuals ? 'Hide All' : 'Show All'}</div>
               </div>
             );
           }
@@ -127,11 +134,12 @@ class TimePlot extends React.Component {
             <div>
                 <div className="download-button" onClick={() => this.downloadImage()}>Download</div>
                 <div id="plot">
-                    <LineChart width={700} height={350} data={this.state.data} ref={(chart) => this.currentChart = chart}>
+                    {(this.state.data) ?
+                    <LineChart width={700} height={350} data={this.state.data} key={this.props.key} ref={(chart) => this.currentChart = chart}>
                         <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="name" height={50} label={{ value: 'Time', position: 'insideBottom' }}>
+                        <XAxis key={this.props.key} dataKey="name" height={50} label={{ value: 'Time', position: 'insideBottom' }}>
                         </XAxis>
-                        <YAxis label={{ value: 'Cell Count (c/mL)', angle: -90, position: 'insideLeft' }} />
+                        <YAxis key={this.props.key} label={{ value: 'Cell Count (c/mL)', angle: -90, position: 'insideLeft' }} />
                         <Legend 
                             content={renderLegend}
                             layout="vertical" 
@@ -141,22 +149,32 @@ class TimePlot extends React.Component {
                             iconType="rect" 
                             onClick={(label) => this.filterFor(label.dataKey)}>
                         </Legend>
-                        <Line type="monotone" className="line" id="Akashiwo" dataKey="Akashiwo" stroke={this.state.colors.Akashiwo} strokeWidth={2} />
-                        <Line type="monotone" className="line" id="Alexandrium_singlet" dataKey="Alexandrium_singlet" stroke={this.state.colors.Alexandrium} strokeWidth={2}/>
-                        <Line type="monotone" className="line" id="Ceratium" dataKey="Ceratium" stroke={this.state.colors.Ceratium} strokeWidth={2}/>
-                        <Line type="monotone" className="line" id="Dinophysis" dataKey="Dinophysis" stroke={this.state.colors.Dinophysis} strokeWidth={2}/>
-                        <Line type="monotone" className="line" id="Cochlodinium" dataKey="Cochlodinium" stroke={this.state.colors.Cochlodinium} strokeWidth={2}/>
-                        <Line type="monotone" className="line" id="Lingulodinium" dataKey="Lingulodinium" stroke={this.state.colors.Lingulodinium} strokeWidth={2}/>
-                        <Line type="monotone" className="line" id="Prorocentrum" dataKey="Prorocentrum" stroke={this.state.colors.Prorocentrum} strokeWidth={2}/>
-                        <Line type="monotone" className="line" id="Pseudo-nitzschia" dataKey="Pseudo-nitzschia" stroke={this.state.colors.PseudoNitzschia} strokeWidth={2}/>
-                        <Line type="monotone" className="line" id="Pennate" dataKey="Pennate" stroke={this.state.colors.Pennate} strokeWidth={2}/>
+                        <Line type="monotone" className="line" id="Akashiwo" dataKey="Akashiwo" isAnimationActive={false} stroke={this.state.colors.Akashiwo} strokeWidth={2} />
+                        <Line type="monotone" className="line" id="Alexandrium_singlet" dataKey="Alexandrium_singlet" isAnimationActive={false} stroke={this.state.colors.Alexandrium} strokeWidth={2}/>
+                        <Line type="monotone" className="line" id="Ceratium" dataKey="Ceratium" isAnimationActive={false} stroke={this.state.colors.Ceratium} strokeWidth={2}/>
+                        <Line type="monotone" className="line" id="Dinophysis" dataKey="Dinophysis" isAnimationActive={false} stroke={this.state.colors.Dinophysis} strokeWidth={2}/>
+                        <Line type="monotone" className="line" id="Cochlodinium" dataKey="Cochlodinium" isAnimationActive={false} stroke={this.state.colors.Cochlodinium} strokeWidth={2}/>
+                        <Line type="monotone" className="line" id="Lingulodinium" dataKey="Lingulodinium" isAnimationActive={false} stroke={this.state.colors.Lingulodinium} strokeWidth={2}/>
+                        <Line type="monotone" className="line" id="Prorocentrum" dataKey="Prorocentrum" isAnimationActive={false} stroke={this.state.colors.Prorocentrum} strokeWidth={2}/>
+                        <Line type="monotone" className="line" id="Pseudo-nitzschia" dataKey="Pseudo-nitzschia" isAnimationActive={false} stroke={this.state.colors.PseudoNitzschia} strokeWidth={2}/>
+                        <Line type="monotone" className="line" id="Pennate" dataKey="Pennate" isAnimationActive={false} stroke={this.state.colors.Pennate} strokeWidth={2}/>
                         {
                             this.state.showThreshold ?
                             <Line type="monotone" className="line" id="Threshold" dataKey="Threshold" name="Warning Threshold" stroke={this.state.colors.Threshold} strokeWidth={2} dot={false}/> :
                             <div/>
                         }
-                    </LineChart>
+                    </LineChart> : <div/>}
                 </div>
+                {this.state.showIndividuals ? 
+                    <div style={{display:'flex', flexWrap:'wrap', marginTop: '30px'}}>
+                        {Object.keys(this.props.thresholds).map(c => 
+                            <ClassPlot 
+                                name={c}
+                                data={this.props.counts.map(data => Object.fromEntries([[c, data[c]], ["Threshold", this.props.thresholds[c]]]))}
+                            />
+                        )}
+                    </div>
+                    : <div/>}
             </div>
         );
     }

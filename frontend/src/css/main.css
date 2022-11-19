@@ -47,6 +47,13 @@ h4 {
     margin: 0;
 }
 
+h5 {
+    font-family: proxima-nova, sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    margin: 0 0 10px 30px;
+}
+
 p {
     font-family: proxima-nova, sans-serif;
     font-size: 15px;

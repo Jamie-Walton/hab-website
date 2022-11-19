@@ -13,17 +13,17 @@ def matlab2datetime(matlab_datenum):
     return day + dayfrac
 
 @api_view(('GET',))
-def load_data(request):
+def load_data(request, week):
     hab_list = ['Akashiwo', 'Alexandrium_singlet', 'Ceratium', 'Dinophysis', \
                'Cochlodinium', 'Lingulodinium', 'Prorocentrum', \
                'Pseudo-nitzschia', 'Pennate']
-    mat = scipy.io.loadmat('data.mat')
+    mat = scipy.io.loadmat('IFCB104/summary/v1_27August2019/summary_allTB_2022.mat')
     classes = mat['class2useTB']
     dates = mat['mdateTB']
     mL = mat['ml_analyzedTB']
     indices = [i for i in range(len(classes)) if classes[i][0][0] in hab_list]
     classcount = mat['classcountTB'][:, indices] / mL
-    startdate = int(dates[len(dates)-1,0])-7
+    startdate = int(dates[len(dates)-1,0])-(7*week)
     weekcounts = []
     empties = False
     for day in range(startdate, startdate+7):
@@ -35,4 +35,7 @@ def load_data(request):
             entry = {name:float(count) for name,count in zip(hab_list,sums)}
         entry['name'] = matlab2datetime(day).strftime('%m/%d/%Y')
         weekcounts += [entry]
-    return JsonResponse({'counts':weekcounts, 'empties':empties})
+    data = {'counts': weekcounts,
+            'empties': empties,
+            }
+    return JsonResponse(data)

@@ -1,5 +1,4 @@
 import './css/main.css';
-import axios from "axios";
 import Page from './components/Page';
 
 function App() {
