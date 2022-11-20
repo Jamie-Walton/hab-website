@@ -24,7 +24,6 @@ class TimePlot extends React.Component {
           },
           showThreshold: false,
           filtered: '',
-          showIndividuals: false,
       }
     }
 
@@ -95,10 +94,6 @@ class TimePlot extends React.Component {
         );
       }
 
-    toggleIndividuals() {
-        this.setState({ showIndividuals: !this.state.showIndividuals });
-    }
-
     render() {
         
         const renderLegend = (props) => {
@@ -125,7 +120,7 @@ class TimePlot extends React.Component {
                     }
                 </ul>
                 {this.state.showThreshold ? <p className="unfilter-button" onClick={() => this.unFilter()}>{'<    Back to All'}</p> : <div/>}
-                <div className="download-button" style={{marginTop: '20px'}} onClick={() => this.toggleIndividuals()}>{this.state.showIndividuals ? 'Hide All' : 'Show All'}</div>
+                <div className="download-button" style={{marginTop: '20px'}} onClick={() => this.props.toggleIndividuals()}>{this.props.showIndividuals ? 'Hide All' : 'Show All'}</div>
               </div>
             );
           }
@@ -165,7 +160,7 @@ class TimePlot extends React.Component {
                         }
                     </LineChart> : <div/>}
                 </div>
-                {this.state.showIndividuals ? 
+                {this.props.showIndividuals ? 
                     <div style={{display:'flex', flexWrap:'wrap', marginTop: '30px'}}>
                         {Object.keys(this.props.thresholds).map(c => 
                             <ClassPlot 

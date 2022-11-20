@@ -12,6 +12,7 @@ class Page extends React.Component {
           week: 1,
           weekName: "",
           timekey: 1,
+          showIndividuals: false,
       }
     }
 
@@ -59,18 +60,40 @@ class Page extends React.Component {
         }
     }
 
+    toggleIndividuals() {
+        this.setState({ showIndividuals: !this.state.showIndividuals });
+    }
+
     render() {
         const thresholds = {
-            "Akashiwo": 100,
-            "Alexandrium_singlet": 100,
-            "Ceratium": 100,
+            "Akashiwo": 10,
+            "Alexandrium_singlet": 10,
+            "Ceratium": 10,
             "Dinophysis": 0.5,
-            "Cochlodinium": 100,
-            "Lingulodinium": 100,
-            "Prorocentrum": 100,
-            "Pseudo-nitzschia": 100,
-            "Pennate": 100,
+            "Cochlodinium": 10,
+            "Lingulodinium": 10,
+            "Prorocentrum": 10,
+            "Pseudo-nitzschia": 10,
+            "Pennate": 10,
         };
+
+        const average = array => array.reduce((a, b) => a + b) / array.length;
+        
+        if (this.state.counts.length > 0) {
+            var averages = 
+                Object.keys(thresholds).map( 
+                    name => Object.fromEntries(
+                        [
+                            ['name', name],
+                            ['below', Math.min(average(this.state.counts.map(c => c[name])), thresholds[name])],
+                            ['above', Math.max(0, average(this.state.counts.map(c => c[name])) - thresholds[name])],
+                        ]
+                        )
+                    );
+        } else {
+            var averages = [];
+        }
+
         return(
             <div className="page">
                 <h4 className="page-title">Weekly HAB Cell Counts</h4>
@@ -86,11 +109,15 @@ class Page extends React.Component {
                     counts={this.state.counts}
                     thresholds={thresholds}
                     key={this.state.timekey}
+                    showIndividuals={this.state.showIndividuals}
+                    toggleIndividuals={() => this.toggleIndividuals()}
                 /> : <div/> }
                 </div>
                 <div className="daily-plot">
-                <h4 className="plot-title">Total Cell Counts</h4>
-                <TotalPlot/>
+                <h4 className="plot-title">Average Daily Cell Counts</h4>
+                <TotalPlot
+                    averages={averages}
+                />
                 </div>
             </div>
         );

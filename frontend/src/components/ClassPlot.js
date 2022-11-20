@@ -28,7 +28,7 @@ class ClassPlot extends React.Component {
             <div>
                 <h5>{this.props.name}</h5>
                 <div id="plot">
-                    <LineChart width={350} height={175} data={this.props.data} key={this.props.key} ref={(chart) => this.currentChart = chart}>
+                    <LineChart width={275} height={150} data={this.props.data} key={this.props.key} ref={(chart) => this.currentChart = chart}>
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis key={this.props.key} dataKey="name" height={50} label={{ value: 'Time', position: 'insideBottom' }}>
                         </XAxis>

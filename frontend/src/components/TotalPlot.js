@@ -26,71 +26,25 @@ class TotalPlot extends React.Component {
 
         const CustomTooltip = ({ active, payload, label }) => {
         if (active && payload && payload.length) {
+            console.log(payload)
             return (
             <div className="custom-tooltip">
                 <p className="label">{`${label}`}</p>
-                <p className="desc">{`${payload[0].value+payload[1].value} c/L total`}</p>
-                <p className="desc">{`${payload[0].value} c/L threshold`}</p>
+                <p className="desc">{`${(payload[0].payload.below + payload[0].payload.above).toFixed(2)} c/mL`}</p>
+                <p className="desc">{`${payload[0].payload.above.toFixed(2)} c/mL above threshold`}</p>
             </div>
             );
         }
         };
 
-        const data = [
-            {
-                "name": "Akashiwo",
-                "above": 1000,
-                "below": 9000,
-            },
-            {
-                "name": "Alexandrium",
-                "above": 0,
-                "below": 1398
-            },
-            {
-                "name": "Ceratium",
-                "above": 2000,
-                "below": 5800
-            },
-            {
-                "name": "Dinophysis",
-                "above": 613,
-                "below": 500
-            },
-            {
-                "name": "Cochlodinium",
-                "above": 0,
-                "below": 3908
-            },
-            {
-                "name": "Lingulodinium",
-                "above": 0,
-                "below": 9000
-            },
-            {
-                "name": "Prorocentrum",
-                "above": 2390,
-                "below": 3800
-            },
-            {
-                "name": "Pseudo-Nitzschia",
-                "above": 0,
-                "below": 8700
-            },
-            {
-                "name": "Pennate",
-                "above": 1056,
-                "below": 10000
-            }
-            ]
         return (
             <div>
                 <div className="download-button" onClick={() => this.downloadImage()}>Download</div>
                 <div id="total-plot">
-                    <BarChart width={700} height={300} data={data}>
+                    <BarChart width={700} height={300} data={this.props.averages}>
                         <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="name" angle={-25} textAnchor="end" height={50} allowDataOverFlow={true} minTickGap={-20}>
-                            <Label value="HAB Species" offset={-30} position="insideBottom" />
+                        <XAxis dataKey="name" angle={-25} textAnchor="end" height={60} allowDataOverFlow={true} minTickGap={-40}>
+                            <Label value="HAB Species" offset={-40} position="insideBottom" />
                         </XAxis>
                         <YAxis label={{ value: 'Cell Count (c/mL)', angle: -90, position: 'insideLeft' }} />
                         <Tooltip 
@@ -102,8 +56,8 @@ class TotalPlot extends React.Component {
                             cursor={{ fill: 'rgba(206, 206, 206, 0.3)' }}
                                 />
                         <Legend layout="vertical" verticalAlign="top" align="right" wrapperStyle={{margin:'0 -20px'}} />
-                        <Bar dataKey="below" name="Below Threshold" stackId="a" fill="#d7d5dd" />
-                        <Bar dataKey="above" name="Above Threshold" stackId="a" fill="#2458DE" />
+                        <Bar dataKey="below" name="Below Warning Threshold" stackId="a" fill="#d7d5dd" />
+                        <Bar dataKey="above" name="Above Warning Threshold" stackId="a" fill="#2458DE" />
                     </BarChart>
                 </div>
             </div>
