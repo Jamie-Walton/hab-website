@@ -1,0 +1,12 @@
+decorator==5.1.1
+Django==3.2.5
+django-cors-headers==3.7.0
+django-db==0.0.7
+django-rest-framework==0.1.0
+djangorestframework==3.12.4
+jsonschema==4.16.0
+matplotlib==3.5.1
+matplotlib-inline==0.1.6
+numpy==1.21.0
+packaging==21.3
+scipy==1.8.0
