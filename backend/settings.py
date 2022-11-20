@@ -25,7 +25,9 @@ SECRET_KEY = 'django-insecure-+x0pvbtb-52xdq16!b6cu^(fndin*=29r#_49py5f3w=w@9ns(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'odontella.oceandatacenter.ucsc.edu:8000',
+]
 
 
 # Application definition
