@@ -9,6 +9,7 @@ class Page extends React.Component {
       super(props);
       this.state = {
           counts: [],
+          days: [],
           week: 1,
           weekName: "",
           timekey: 1,
@@ -22,6 +23,7 @@ class Page extends React.Component {
                 .get('/load/' + week +'/')
                 .then((res) => {
                     const counts = res.data.counts;
+                    const days = res.data.days;
                     if (res.data.empties) {
                         console.log(res.data.empties);
                         for (let i = 0; i < counts.length; i++) {
@@ -34,7 +36,8 @@ class Page extends React.Component {
                     }
                     this.setState({
                         counts: counts,
-                        weekName: `${counts[0].name} to ${counts[6].name}`,
+                        days: days,
+                        weekName: `${days[0]} to ${days[6]}`,
                         timekey: this.state.timekey + 1,
                         });
 
@@ -66,14 +69,14 @@ class Page extends React.Component {
 
     render() {
         const thresholds = {
-            "Akashiwo": 10,
-            "Alexandrium_singlet": 10,
-            "Ceratium": 10,
+            "Akashiwo": null,
+            "Alexandrium_singlet": 0,
+            "Ceratium": null,
             "Dinophysis": 0.5,
-            "Cochlodinium": 10,
-            "Lingulodinium": 10,
-            "Prorocentrum": 10,
-            "Pseudo-nitzschia": 10,
+            "Cochlodinium": null,
+            "Lingulodinium": null,
+            "Prorocentrum": null,
+            "Pseudo_nitzschia": 10,
             "Pennate": 10,
         };
 
@@ -103,10 +106,11 @@ class Page extends React.Component {
                 <h3 className="day-arrow" onClick={() => this.next()} style={{paddingLeft: '10px'}}>{'>'}</h3>
                 </div>
             <div className="daily-plot">
-                <h4 className="plot-title">Cell Counts by Day</h4>
+                <h4 className="plot-title">Cell Counts</h4>
                 {(this.state.counts) ?
                 <TimePlot 
                     counts={this.state.counts}
+                    days={this.state.days}
                     thresholds={thresholds}
                     key={this.state.timekey}
                     showIndividuals={this.state.showIndividuals}
@@ -114,7 +118,7 @@ class Page extends React.Component {
                 /> : <div/> }
                 </div>
                 <div className="daily-plot">
-                <h4 className="plot-title">Average Daily Cell Counts</h4>
+                <h4 className="plot-title">Average Weekly Cell Counts</h4>
                 <TotalPlot
                     averages={averages}
                 />

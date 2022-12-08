@@ -32,24 +32,34 @@ def load_data(request, week):
     
     classes = mat['class2useTB']
     indices = [i for i in range(len(classes)) if classes[i][0][0] in hab_list]
+    hab_list = ['Akashiwo', 'Alexandrium_singlet', 'Ceratium', 'Dinophysis', \
+               'Cochlodinium', 'Lingulodinium', 'Prorocentrum', \
+               'Pseudo_nitzschia', 'Pennate']
     mL = mat['ml_analyzedTB']
     classcount = mat['classcountTB'][:, indices] / mL
     weekcounts = []
     empties = False
-    for day in range(startdate, startdate+7):
+    days = range(startdate, startdate+7)
+    day_strings = []
+    for daynum in range(0,7):
+        day = days[daynum]
+        day_strings += [matlab2datetime(day).strftime('%m/%d/%Y')]
         same_day_indices = np.where(np.floor(dates)==day)[0]
+        timestamps = dates[same_day_indices, :]
         day_count = classcount[same_day_indices, :]
         day_mL = mL[same_day_indices, :]
-        sums = sum(day_count/day_mL)
-        if isinstance(sums, int):
-            entry = {name:0 for name in hab_list}
-            empties = True
-        else:
-            sums = np.ndarray.tolist(sums)
-            entry = {name:float(count) for name,count in zip(hab_list,sums)}
-        entry['name'] = matlab2datetime(day).strftime('%m/%d/%Y')
-        weekcounts += [entry]
+        file_counts = day_count/day_mL
+        for f in range(len(file_counts)):
+            file = file_counts[f]
+            final_counts = np.ndarray.tolist(file)
+            entry = {name:float(count) for name,count in zip(hab_list,final_counts)}
+            time = matlab2datetime(timestamps[f][0]).strftime("%H:%M:%S").split(':')
+            seconds = 86400*daynum + 3600*int(time[0]) + 60*int(time[1]) + int(time[2])
+            entry['name'] = seconds
+            entry['timestamp'] = matlab2datetime(timestamps[f][0]).strftime("%m/%d/%Y, %H:%M:%S")
+            weekcounts += [entry]
     data = {'counts': weekcounts,
             'empties': empties,
+            'days': day_strings,
             }
     return JsonResponse(data)

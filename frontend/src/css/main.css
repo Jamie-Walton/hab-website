@@ -186,3 +186,35 @@ li {
 .download-button:hover {
     background-color: #a7a5b6;
 }
+
+.day-axis {
+    display: flex;
+    justify-content: space-between;
+    width: 465px;
+    margin: -8px 0 0 50px;
+}
+
+.axis-name-container {
+    justify-content: center;
+    margin-top: -15px;
+}
+
+.mini {
+    width: 210px !important;
+}
+
+.mini-text {
+    font-size: 10px !important;
+}
+
+.axis-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: #000000;
+}
+
+.axis-label {
+    font-size: 12px;
+    font-weight: 300;
+    color:#777777;
+}

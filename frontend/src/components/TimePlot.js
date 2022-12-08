@@ -3,6 +3,7 @@ import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Label } 
 import domtoimage from 'dom-to-image-improved';
 import ClassPlot from "./ClassPlot";
 
+
 class TimePlot extends React.Component {
   
     constructor(props) {
@@ -18,7 +19,7 @@ class TimePlot extends React.Component {
               Cochlodinium: '#10adab',
               Lingulodinium: '#106cad',
               Prorocentrum: '#1034ad',
-              PseudoNitzschia: '#6910ad',
+              Pseudo_nitzschia: '#6910ad',
               Pennate: '#8e10ad',
               Threshold: '#ad10a6',
           },
@@ -34,7 +35,7 @@ class TimePlot extends React.Component {
     }
 
     filterFor(species) {
-        const data = this.props.counts.map(t => ({ name: t.name, [species]: t[species], Threshold: this.props.thresholds[species] }))
+        const data = this.props.counts.map(t => ({ name: t.name, [species]: t[species], timestamp: t.timestamp, Threshold: this.props.thresholds[species] }))
         this.setState({ 
             data: data,
             showThreshold: true,
@@ -87,7 +88,7 @@ class TimePlot extends React.Component {
                 {this.renderLegendItemSVG('Cochlodinium', 82)}
                 {this.renderLegendItemSVG('Lingulodinium', 100)}
                 {this.renderLegendItemSVG('Prorocentrum', 118)}
-                {this.renderLegendItemSVG('PseudoNitzschia', 136)}
+                {this.renderLegendItemSVG('Pseudo_nitzschia', 136)}
                 {this.renderLegendItemSVG('Pennate', 154)}
                 {this.renderLegendItemSVG('Threshold', 172)}
             </svg>
@@ -95,6 +96,30 @@ class TimePlot extends React.Component {
       }
 
     render() {
+        
+        const CustomTooltip = ({ active, payload, label }) => {
+            if (active && payload && payload.length) {
+                console.log(payload[0].payload.timestamp)
+                return (
+                <div className="custom-tooltip">
+                    <p className="label">{`${payload[0].payload.timestamp}`}</p>
+                    {this.state.filtered ?
+                    <p className="desc">{`${this.state.filtered}: ${((payload[0].payload[this.state.filtered]).toFixed(2))} c/mL`}</p> :
+                    <div>
+                        <p className="desc">{`Akashiwo: ${((payload[0].payload.Akashiwo).toFixed(2))} c/mL`}</p>
+                        <p className="desc">{`Alexandrium: ${((payload[0].payload.Alexandrium_singlet).toFixed(2))} c/mL`}</p>
+                        <p className="desc">{`Dinophysis: ${((payload[0].payload.Dinophysis).toFixed(2))} c/mL`}</p>
+                        <p className="desc">{`Cochlodinium: ${((payload[0].payload.Cochlodinium).toFixed(2))} c/mL`}</p>
+                        <p className="desc">{`Lingulodinium: ${((payload[0].payload.Lingulodinium).toFixed(2))} c/mL`}</p>
+                        <p className="desc">{`Prorocentrum: ${((payload[0].payload.Prorocentrum).toFixed(2))} c/mL`}</p>
+                        <p className="desc">{`Pseudo Nitzschia: ${((payload[0].payload.Pseudo_nitzschia).toFixed(2))} c/mL`}</p>
+                        <p className="desc">{`Pennate: ${((payload[0].payload.Pennate).toFixed(2))} c/mL`}</p>
+                    </div>
+                    }
+                </div>
+                );
+            }
+            };
         
         const renderLegend = (props) => {
             var { payload } = props;
@@ -132,9 +157,27 @@ class TimePlot extends React.Component {
                     {(this.state.data) ?
                     <LineChart width={700} height={350} data={this.state.data} key={this.props.key} ref={(chart) => this.currentChart = chart}>
                         <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis key={this.props.key} dataKey="name" height={50} label={{ value: 'Time', position: 'insideBottom' }}>
+                        <XAxis 
+                            key={this.props.key} 
+                            dataKey="name"
+                            height={50}
+                            type="number"
+                            tickCount={26}
+                            interval={0}
+                            hide={true}
+                            domain={[0,604800]}
+                            label={{ value: 'Time', position: 'insideBottom' }}>
                         </XAxis>
                         <YAxis key={this.props.key} label={{ value: 'Cell Count (c/mL)', angle: -90, position: 'insideLeft' }} />
+                        <Tooltip 
+                            content={<CustomTooltip />} 
+                            itemStyle={{backgroundColor:'#FFFFFF', color:'#777777'}} 
+                            wrapperStyle={{backgroundColor:'#FFFFFF', color: '#777777', padding:15,
+                                borderRadius:15
+                            }}
+                            position={{ x: 750, y: 18 }}
+                            cursor={{ fill: 'rgba(206, 206, 206, 0.3)' }}
+                                />
                         <Legend 
                             content={renderLegend}
                             layout="vertical" 
@@ -144,28 +187,42 @@ class TimePlot extends React.Component {
                             iconType="rect" 
                             onClick={(label) => this.filterFor(label.dataKey)}>
                         </Legend>
-                        <Line type="monotone" className="line" id="Akashiwo" dataKey="Akashiwo" isAnimationActive={false} stroke={this.state.colors.Akashiwo} strokeWidth={2} />
-                        <Line type="monotone" className="line" id="Alexandrium_singlet" dataKey="Alexandrium_singlet" isAnimationActive={false} stroke={this.state.colors.Alexandrium} strokeWidth={2}/>
-                        <Line type="monotone" className="line" id="Ceratium" dataKey="Ceratium" isAnimationActive={false} stroke={this.state.colors.Ceratium} strokeWidth={2}/>
-                        <Line type="monotone" className="line" id="Dinophysis" dataKey="Dinophysis" isAnimationActive={false} stroke={this.state.colors.Dinophysis} strokeWidth={2}/>
-                        <Line type="monotone" className="line" id="Cochlodinium" dataKey="Cochlodinium" isAnimationActive={false} stroke={this.state.colors.Cochlodinium} strokeWidth={2}/>
-                        <Line type="monotone" className="line" id="Lingulodinium" dataKey="Lingulodinium" isAnimationActive={false} stroke={this.state.colors.Lingulodinium} strokeWidth={2}/>
-                        <Line type="monotone" className="line" id="Prorocentrum" dataKey="Prorocentrum" isAnimationActive={false} stroke={this.state.colors.Prorocentrum} strokeWidth={2}/>
-                        <Line type="monotone" className="line" id="Pseudo-nitzschia" dataKey="Pseudo-nitzschia" isAnimationActive={false} stroke={this.state.colors.PseudoNitzschia} strokeWidth={2}/>
-                        <Line type="monotone" className="line" id="Pennate" dataKey="Pennate" isAnimationActive={false} stroke={this.state.colors.Pennate} strokeWidth={2}/>
+                        <Line type="monotone" className="line" dot={false} id="Akashiwo" dataKey="Akashiwo" isAnimationActive={false} stroke={this.state.colors.Akashiwo} strokeWidth={2} />
+                        <Line type="monotone" className="line" dot={false} id="Alexandrium_singlet" dataKey="Alexandrium_singlet" isAnimationActive={false} stroke={this.state.colors.Alexandrium} strokeWidth={2}/>
+                        <Line type="monotone" className="line" dot={false} id="Ceratium" dataKey="Ceratium" isAnimationActive={false} stroke={this.state.colors.Ceratium} strokeWidth={2}/>
+                        <Line type="monotone" className="line" dot={false} id="Dinophysis" dataKey="Dinophysis" isAnimationActive={false} stroke={this.state.colors.Dinophysis} strokeWidth={2}/>
+                        <Line type="monotone" className="line" dot={false} id="Cochlodinium" dataKey="Cochlodinium" isAnimationActive={false} stroke={this.state.colors.Cochlodinium} strokeWidth={2}/>
+                        <Line type="monotone" className="line" dot={false} id="Lingulodinium" dataKey="Lingulodinium" isAnimationActive={false} stroke={this.state.colors.Lingulodinium} strokeWidth={2}/>
+                        <Line type="monotone" className="line" dot={false} id="Prorocentrum" dataKey="Prorocentrum" isAnimationActive={false} stroke={this.state.colors.Prorocentrum} strokeWidth={2}/>
+                        <Line type="monotone" className="line" dot={false} id="Pseudo_nitzschia" dataKey="Pseudo_nitzschia" isAnimationActive={false} stroke={this.state.colors.Pseudo_nitzschia} strokeWidth={2}/>
+                        <Line type="monotone" className="line" dot={false} id="Pennate" dataKey="Pennate" isAnimationActive={false} stroke={this.state.colors.Pennate} strokeWidth={2}/>
                         {
                             this.state.showThreshold ?
                             <Line type="monotone" className="line" id="Threshold" dataKey="Threshold" name="Warning Threshold" stroke={this.state.colors.Threshold} strokeWidth={2} dot={false}/> :
                             <div/>
                         }
                     </LineChart> : <div/>}
+                    {this.props.days.length > 0 ?
+                    <div className='day-axis'>
+                        <p className='axis-label'>{this.props.days[0].slice(0,5)}</p>
+                        <p className='axis-label'>{this.props.days[1].slice(0,5)}</p>
+                        <p className='axis-label'>{this.props.days[2].slice(0,5)}</p>
+                        <p className='axis-label'>{this.props.days[3].slice(0,5)}</p>
+                        <p className='axis-label'>{this.props.days[4].slice(0,5)}</p>
+                        <p className='axis-label'>{this.props.days[5].slice(0,5)}</p>
+                        <p className='axis-label'>{this.props.days[6].slice(0,5)}</p>
+                    </div> : <div/> }
+                    <div className='day-axis axis-name-container'>
+                        <p className='axis-name'>Date</p>
+                    </div>
                 </div>
                 {this.props.showIndividuals ? 
                     <div style={{display:'flex', flexWrap:'wrap', marginTop: '30px'}}>
                         {Object.keys(this.props.thresholds).map(c => 
                             <ClassPlot 
                                 name={c}
-                                data={this.props.counts.map(data => Object.fromEntries([[c, data[c]], ["Threshold", this.props.thresholds[c]]]))}
+                                days={this.props.days}
+                                data={this.props.counts.map(data => Object.fromEntries([[c, data[c]], ["name",data['name']], ["Threshold", this.props.thresholds[c]]]))}
                             />
                         )}
                     </div>

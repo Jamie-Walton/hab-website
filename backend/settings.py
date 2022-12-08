@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'odontella.oceandatacenter.ucsc.edu:8000',
+    'localhost'
 ]
 
 
