@@ -106,7 +106,7 @@ class Page extends React.Component {
                 <h3 className="day-arrow" onClick={() => this.next()} style={{paddingLeft: '10px'}}>{'>'}</h3>
                 </div>
             <div className="daily-plot">
-                <h4 className="plot-title">Cell Counts</h4>
+                <h4 className="plot-title">Cell Counts Over Time</h4>
                 {(this.state.counts) ?
                 <TimePlot 
                     counts={this.state.counts}
