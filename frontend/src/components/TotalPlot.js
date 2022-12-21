@@ -26,12 +26,11 @@ class TotalPlot extends React.Component {
 
         const CustomTooltip = ({ active, payload, label }) => {
         if (active && payload && payload.length) {
-            console.log(payload)
+            const desc = Math.max(payload[0].payload.none, payload[0].payload.below, payload[0].payload.above).toFixed(2)
             return (
             <div className="custom-tooltip">
                 <p className="label">{`${label}`}</p>
-                <p className="desc">{`${(payload[0].payload.below + payload[0].payload.above).toFixed(2)} c/mL`}</p>
-                <p className="desc">{`${payload[0].payload.above.toFixed(2)} c/mL above threshold`}</p>
+                <p className="desc">{`${desc} c/mL`}</p>
             </div>
             );
         }
