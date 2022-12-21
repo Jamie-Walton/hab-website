@@ -9,7 +9,7 @@ function App() {
         <h2 className="subheading">Kudela Lab</h2>
         <h1 className="main-heading">HAB Tracker</h1>
         <h3 className="description-heading">
-          Keep track of the harmful algae blooms at the Santa Wharf in California.
+          Keep track of harmful algae at the Santa Cruz Wharf in California.
         </h3>
       </div>
       {<Page/>}

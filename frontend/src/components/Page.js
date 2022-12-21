@@ -98,30 +98,34 @@ class Page extends React.Component {
         }
 
         return(
-            <div className="page">
-                <h4 className="page-title">Weekly HAB Cell Counts</h4>
-                <div style={{display:"flex"}}>
-                <h3 className="day-arrow" onClick={() => this.back()} style={{paddingRight: '10px'}}>{'<'}</h3>
-                <h3>{this.state.weekName}</h3>
-                <h3 className="day-arrow" onClick={() => this.next()} style={{paddingLeft: '10px'}}>{'>'}</h3>
-                </div>
-            <div className="daily-plot">
-                <h4 className="plot-title">Cell Counts Over Time</h4>
-                {(this.state.counts) ?
-                <TimePlot 
-                    counts={this.state.counts}
-                    days={this.state.days}
-                    thresholds={thresholds}
-                    key={this.state.timekey}
-                    showIndividuals={this.state.showIndividuals}
-                    toggleIndividuals={() => this.toggleIndividuals()}
-                /> : <div/> }
-                </div>
+            <div>
+                <div className="page">
+                    <h4 className="page-title">HAB Cell Concentration</h4>
+                    <div style={{display:"flex"}}>
+                    <h3 className="day-arrow" onClick={() => this.back()} style={{paddingRight: '10px'}}>{'<'}</h3>
+                    <h3>{this.state.weekName}</h3>
+                    <h3 className="day-arrow" onClick={() => this.next()} style={{paddingLeft: '10px'}}>{'>'}</h3>
+                    </div>
                 <div className="daily-plot">
-                <h4 className="plot-title">Average Weekly Cell Counts</h4>
-                <TotalPlot
-                    averages={averages}
-                />
+                    {(this.state.counts) ?
+                    <TimePlot 
+                        counts={this.state.counts}
+                        days={this.state.days}
+                        thresholds={thresholds}
+                        key={this.state.timekey}
+                        showIndividuals={this.state.showIndividuals}
+                        toggleIndividuals={() => this.toggleIndividuals()}
+                    /> : <div/> }
+                    </div>
+                    <div className="daily-plot">
+                        <h4 className="plot-title">Weekly Average by Genus</h4>
+                        <TotalPlot
+                            averages={averages}
+                        />
+                    </div>
+                </div>
+                <div className='footer'>
+                    <p className='disclaimer'><b>Note:</b> This is real time data from an automated classifier. Cell identification and concentrations are not necessarily manually confirmed.</p>
                 </div>
             </div>
         );

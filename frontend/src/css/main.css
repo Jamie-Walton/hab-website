@@ -8,6 +8,8 @@ body {
 
 .page {
     padding: 75px;
+    display: flex;
+    flex-direction: column;
 }
 
 .header {
@@ -81,6 +83,25 @@ p {
 
 .page-title {
     color: #2458DE;
+}
+
+
+.footer {
+    background-color: #8f94a1;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 50px 0px 70px;
+}
+
+.disclaimer {
+    margin: 40px 0 0 0;
+    width: 400px;
+    align-self: center;
+    color: #FFFFFF;
+    text-align: center;
+    font-style: italic;
+    font-size: 12px;
 }
 
 .day-arrow {
