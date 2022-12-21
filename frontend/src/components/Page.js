@@ -25,7 +25,6 @@ class Page extends React.Component {
                     const counts = res.data.counts;
                     const days = res.data.days;
                     if (res.data.empties) {
-                        console.log(res.data.empties);
                         for (let i = 0; i < counts.length; i++) {
                             Object.keys(counts[i]).forEach((key, index) => {
                                 if (counts[i][key] === 0) {
@@ -88,8 +87,9 @@ class Page extends React.Component {
                     name => Object.fromEntries(
                         [
                             ['name', name],
-                            ['below', Math.min(average(this.state.counts.map(c => c[name])), thresholds[name])],
-                            ['above', Math.max(0, average(this.state.counts.map(c => c[name])) - thresholds[name])],
+                            ['none', (thresholds[name]) ? 0 : average(this.state.counts.map(c => c[name]))],
+                            ['below', (thresholds[name]) ? ( (average(this.state.counts.map(c => c[name])) < thresholds[name]) ? average(this.state.counts.map(c => c[name])) : 0 ) : 0],
+                            ['above', (thresholds[name]) ? ( (average(this.state.counts.map(c => c[name])) > thresholds[name]) ? average(this.state.counts.map(c => c[name])) : 0 ) : 0],
                         ]
                         )
                     );
