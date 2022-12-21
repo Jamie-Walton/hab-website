@@ -107,9 +107,9 @@ class Page extends React.Component {
                 <div className="page">
                     <h4 className="page-title">HAB Cell Concentration</h4>
                     <div style={{display:"flex"}}>
-                    <h3 className="day-arrow" onClick={() => this.back()} style={{paddingRight: '10px'}}>{'<'}</h3>
-                    <h3>{this.state.weekName}</h3>
-                    <h3 className="day-arrow" onClick={() => this.next()} style={{paddingLeft: '10px'}}>{'>'}</h3>
+                        <h3 className="day-arrow" onClick={() => this.back()} style={{paddingRight: '10px'}}>{'<'}</h3>
+                        <h3>{this.state.weekName}</h3>
+                        <h3 className="day-arrow" onClick={() => this.next()} style={{paddingLeft: '10px'}}>{'>'}</h3>
                     </div>
                 <div className="daily-plot">
                     {(this.state.counts) ?
@@ -126,6 +126,11 @@ class Page extends React.Component {
                     </div>
                     <div className="daily-plot">
                         <h4 className="plot-title">Weekly Average by Genus</h4>
+                        <div style={{display:"flex"}}>
+                            <h3 className="day-arrow" onClick={() => this.back()} style={{paddingRight: '10px'}}>{'<'}</h3>
+                            <h3>{this.state.weekName}</h3>
+                            <h3 className="day-arrow" onClick={() => this.next()} style={{paddingLeft: '10px'}}>{'>'}</h3>
+                        </div>
                         <TotalPlot
                             averages={averages}
                         />

@@ -106,7 +106,6 @@ class TimePlot extends React.Component {
         
         const CustomTooltip = ({ active, payload, label }) => {
             if (active && payload && payload.length) {
-                console.log(payload[0].payload.timestamp)
                 return (
                 <div className="custom-tooltip">
                     <p className="label">{`${payload[0].payload.timestamp}`}</p>
@@ -121,6 +120,7 @@ class TimePlot extends React.Component {
                         <p className="desc">{`Prorocentrum: ${((payload[0].payload.Prorocentrum).toFixed(2))} c/mL`}</p>
                         <p className="desc">{`Pseudo Nitzschia: ${((payload[0].payload.Pseudo_nitzschia).toFixed(2))} c/mL`}</p>
                         <p className="desc">{`Pennate: ${((payload[0].payload.Pennate).toFixed(2))} c/mL`}</p>
+                        <p className="desc biomass-desc">{`Total Biomass: ${((payload[0].payload.Total).toFixed(2))} c/mL`}</p>
                     </div>
                     }
                 </div>
