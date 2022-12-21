@@ -14,6 +14,7 @@ class Page extends React.Component {
           weekName: "",
           timekey: 1,
           showIndividuals: false,
+          hideTotal: false,
       }
     }
 
@@ -66,6 +67,10 @@ class Page extends React.Component {
         this.setState({ showIndividuals: !this.state.showIndividuals });
     }
 
+    toggleTotal() {
+        this.setState({ hideTotal: !this.state.hideTotal });
+    }
+
     render() {
         const thresholds = {
             "Akashiwo": null,
@@ -114,7 +119,9 @@ class Page extends React.Component {
                         thresholds={thresholds}
                         key={this.state.timekey}
                         showIndividuals={this.state.showIndividuals}
+                        hideTotal={this.state.hideTotal}
                         toggleIndividuals={() => this.toggleIndividuals()}
+                        toggleTotal={() => this.toggleTotal()}
                     /> : <div/> }
                     </div>
                     <div className="daily-plot">

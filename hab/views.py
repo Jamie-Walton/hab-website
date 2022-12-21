@@ -57,6 +57,7 @@ def load_data(request, week):
             seconds = 86400*daynum + 3600*int(time[0]) + 60*int(time[1]) + int(time[2])
             entry['name'] = seconds
             entry['timestamp'] = matlab2datetime(timestamps[f][0]).strftime("%m/%d/%Y, %H:%M:%S")
+            entry['Total'] = sum(final_counts)
             weekcounts += [entry]
     data = {'counts': weekcounts,
             'empties': empties,

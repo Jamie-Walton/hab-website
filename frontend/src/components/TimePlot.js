@@ -22,8 +22,10 @@ class TimePlot extends React.Component {
               Pseudo_nitzschia: '#6910ad',
               Pennate: '#8e10ad',
               Threshold: '#ad10a6',
+              Total: '#cfd2d4'
           },
           showThreshold: false,
+          showTotal: true,
           filtered: '',
       }
     }
@@ -63,6 +65,11 @@ class TimePlot extends React.Component {
             .catch(function (error) {
                 console.error('oops, something went wrong!', error);
             });
+      }
+
+      toggleTotal() {
+          this.unFilter();
+          this.setState({ showTotal: !(this.state.showTotal) });
       }
 
       renderLegendItemSVG(name, y) {
@@ -126,6 +133,7 @@ class TimePlot extends React.Component {
             if (this.state.filtered) {
                 payload = payload.filter(c => c.payload.id === this.state.filtered || c.payload.id === 'Threshold');
             }
+            
           
             return (
             <div>
@@ -145,14 +153,41 @@ class TimePlot extends React.Component {
                     }
                 </ul>
                 {this.state.showThreshold ? <p className="unfilter-button" onClick={() => this.unFilter()}>{'<    Back to All'}</p> : <div/>}
-                <div className="download-button" style={{marginTop: '20px'}} onClick={() => this.props.toggleIndividuals()}>{this.props.showIndividuals ? 'Hide All' : 'Show All'}</div>
+                <div className="download-button" style={{margin: '20px 0 10px 0'}} onClick={() => this.props.toggleIndividuals()}>{this.props.showIndividuals ? 'Hide All' : 'Show All'}</div>
+                <div className="download-button" style={{marginTop: '0px'}} onClick={() => this.props.toggleTotal()}>{this.props.hideTotal ? 'Show Total' : 'Hide Total'}</div>
+              </div>
+            );
+          }
+
+          const renderTotalLegend = (props) => {
+            var { payload } = props;
+   
+            return (
+            <div>
+                <ul className="recharts-default-legend" style={{padding: "0px", margin: "0px", textAlign: "left"}}>
+                    {
+                    payload.map((entry, index) => (
+                        <li className="recharts-legend-item" key={`item-${index}`} onClick={() => this.filterFor(entry.value)}>
+                            <svg className="recharts-surface" width="14" height="14" viewBox="0 0 32 32" version="1.1" style={{display: "inlineBlock", verticalAlign: "middle", marginRight: "8px"}}>
+                                <title></title>
+                                <desc></desc>
+                                <path stroke="none" fill={entry.color} d="M0,4h32v24h-32z" className="recharts-legend-icon"></path>
+                            </svg>
+                            Total Cell Concentration
+                        </li>
+                    ))
+                    }
+                </ul>
               </div>
             );
           }
 
         return (
             <div>
-                <div className="download-button" onClick={() => this.downloadImage()}>Download</div>
+                <div style={{display: 'flex'}}>
+                    <div className="download-button" onClick={() => this.downloadImage()}>Download</div>
+                    <div className="download-button" onClick={() => this.toggleTotal()}>Toggle Total</div>
+                </div>
                 <div id="plot">
                     {(this.state.data) ?
                     <LineChart width={700} height={350} data={this.state.data} key={this.props.key} ref={(chart) => this.currentChart = chart}>
@@ -197,6 +232,11 @@ class TimePlot extends React.Component {
                         <Line type="monotone" className="line" dot={false} id="Pseudo_nitzschia" dataKey="Pseudo_nitzschia" isAnimationActive={false} stroke={this.state.colors.Pseudo_nitzschia} strokeWidth={2}/>
                         <Line type="monotone" className="line" dot={false} id="Pennate" dataKey="Pennate" isAnimationActive={false} stroke={this.state.colors.Pennate} strokeWidth={2}/>
                         {
+                            (this.state.showTotal && !this.props.hideTotal) ?
+                            <Line type="monotone" className="line" dot={false} id="Total" dataKey="Total" name="Total" isAnimationActive={false} stroke={this.state.colors.Total} strokeWidth={1.5}/> :
+                            <div/>
+                        }
+                        {
                             this.state.showThreshold ?
                             <Line type="monotone" className="line" id="Threshold" dataKey="Threshold" name="Warning Threshold" stroke={this.state.colors.Threshold} strokeWidth={2} dot={false}/> :
                             <div/>
@@ -227,6 +267,35 @@ class TimePlot extends React.Component {
                         )}
                     </div>
                     : <div/>}
+                {(this.state.showTotal) ? <div/> :
+                <LineChart 
+                    width={725} height={350} 
+                    data={this.props.counts.map(data => Object.fromEntries([['Total', data['Total']], ["name",data['name']], ["Threshold", null]]))} 
+                    key={this.props.key} ref={(chart) => this.currentChart = chart}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis 
+                        key={this.props.key} 
+                        dataKey="name"
+                        height={50}
+                        type="number"
+                        tickCount={26}
+                        interval={0}
+                        hide={true}
+                        domain={[0,604800]}
+                        label={{ value: 'Time', position: 'insideBottom' }}>
+                    </XAxis>
+                    <YAxis key={this.props.key} label={{ value: 'Cell Count (c/mL)', angle: -90, position: 'insideLeft' }} />
+                    <Legend 
+                        content={renderTotalLegend}
+                        layout="vertical" 
+                        verticalAlign="top" 
+                        align="right" 
+                        wrapperStyle={{margin:'0 -20px', cursor: 'pointer'}} 
+                        iconType="rect" >
+                    </Legend>
+                    <Line type="monotone" className="line" dot={false} id="Total" dataKey="Total" name="Total" isAnimationActive={false} stroke={this.state.colors.Total} strokeWidth={1.5}/>
+                </LineChart>
+                }
             </div>
         );
     }
