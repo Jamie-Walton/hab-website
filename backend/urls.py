@@ -19,5 +19,6 @@ from django.urls import path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('load/<int:week>/', views.load_data),
+    path('load/<int:week>/', views.load_by_week),
+    path('load/<str:start_date>/<str:end_date>/', views.load_by_range)
 ]

@@ -15,8 +15,8 @@ def matlab2datetime(matlab_datenum):
     return day + dayfrac
 
 
-@api_view(('GET',))
-def load_data(request, week):
+def load_data(start_date=None, week=None):
+
     hab_list = ['Akashiwo', 'Alexandrium_singlet', 'Ceratium', 'Dinophysis', \
                'Cochlodinium', 'Lingulodinium', 'Prorocentrum', \
                'Pseudo-nitzschia', 'Pennate']
@@ -24,8 +24,9 @@ def load_data(request, week):
     mat = scipy.io.loadmat(f'IFCB104/summary/v1_27August2019/{max(files)}')
     files = [f for f in files if f != max(files)]
     dates = mat['mdateTB']
-    startdate = int(dates[len(dates)-1,0])-(7*week)
-    while matlab2datetime(startdate).year != matlab2datetime(int(dates[0,0])).year and files:
+    if not start_date:
+        start_date = int(dates[len(dates)-1,0])-(7*week)
+    while matlab2datetime(start_date).year != matlab2datetime(int(dates[0,0])).year and files:
         mat = scipy.io.loadmat(f'IFCB104/summary/v1_27August2019/{max(files)}')
         files = [f for f in files if f != max(files)]
         dates = mat['mdateTB']
@@ -37,11 +38,17 @@ def load_data(request, week):
                'Pseudo_nitzschia', 'Pennate']
     mL = mat['ml_analyzedTB']
     classcount = mat['classcountTB'][:, indices] / mL
+
+    return (start_date, dates, classcount, mL, hab_list)
+
+
+def wrap_data(start_date, end_date, dates, classcount, mL, hab_list):
+
     weekcounts = []
     empties = False
-    days = range(startdate, startdate+7)
+    days = range(start_date, end_date+1)
     day_strings = []
-    for daynum in range(0,7):
+    for daynum in range(0,len(days)):
         day = days[daynum]
         day_strings += [matlab2datetime(day).strftime('%m/%d/%Y')]
         same_day_indices = np.where(np.floor(dates)==day)[0]
@@ -63,4 +70,33 @@ def load_data(request, week):
             'empties': empties,
             'days': day_strings,
             }
+
+    return data
+    
+
+
+@api_view(('GET',))
+def load_by_week(request, week):
+
+    [start_date, dates, classcount, mL, hab_list] = load_data(week=week)
+    data = wrap_data(start_date, start_date+6, dates, classcount, mL, hab_list)
+
     return JsonResponse(data)
+
+
+@api_view(('GET',))
+def load_by_range(request, start_date, end_date):
+
+    assert len(start_date) == 8, 'Start date is not valid.'
+    assert len(end_date) == 8, 'End date is not valid.'
+
+    ord_start = dt.datetime.toordinal(dt.datetime.strptime(start_date, '%m%d%Y'))+366
+    ord_end = dt.datetime.toordinal(dt.datetime.strptime(end_date, '%m%d%Y'))+366
+    [ord_start, dates, classcount, mL, hab_list] = load_data(start_date=ord_start)
+    data = wrap_data(ord_start, ord_end, dates, classcount, mL, hab_list)
+    
+    return JsonResponse(data)
+
+
+
+

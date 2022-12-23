@@ -8,15 +8,15 @@ class ClassPlot extends React.Component {
       this.state = {
           key: 1,
           colors: {
-            Akashiwo: '#b86c02',
-            Alexandrium_singlet: '#ba9b02',
-            Ceratium: '#4bb802',
-            Dinophysis: '#02bd8b',
+            Akashiwo: '#eb9902',
+            Alexandrium_singlet: '#ebc802',
+            Ceratium: '#97b504',
+            Dinophysis: '#15b504',
             Cochlodinium: '#02bab1',
-            Lingulodinium: '#027dba',
-            Prorocentrum: '#022dba',
-            Pseudo_nitzschia: '#5b02ba',
-            Pennate: '#b702ba',
+            Lingulodinium: '#0282de',
+            Prorocentrum: '#1902c9',
+            Pseudo_nitzschia: '#8e02c9',
+            Pennate: '#c902af',
             Threshold: '#ba023c',
             Total: '#cfd2d4'
         },
@@ -42,18 +42,12 @@ class ClassPlot extends React.Component {
                             domain={[0,604800]}>
                         </XAxis>
                         <YAxis key={this.props.key} label={{ value: 'Cell Count (c/mL)', angle: -90, position: 'center' }} />
-                        <Line type="monotone" className="line" dot={false} id={this.props.name} dataKey={this.props.name} isAnimationActive={false} stroke={this.state.colors[this.props.name]} strokeWidth={2} />
+                        <Line type="monotone" className="line" dot={false} id={this.props.name} dataKey={this.props.name} isAnimationActive={false} stroke={this.state.colors[this.props.name]} strokeWidth={1} />
                         <Line type="monotone" className="line" dot={false} id="Threshold" dataKey="Threshold" stroke={this.state.colors.Threshold} strokeWidth={2} dot={false}/>
                     </LineChart>
                     {this.props.days.length > 0 ?
                     <div className='day-axis mini'>
-                        <p className='axis-label mini-text'>{this.props.days[0].slice(0,5)}</p>
-                        <p className='axis-label mini-text'>{this.props.days[1].slice(0,5)}</p>
-                        <p className='axis-label mini-text'>{this.props.days[2].slice(0,5)}</p>
-                        <p className='axis-label mini-text'>{this.props.days[3].slice(0,5)}</p>
-                        <p className='axis-label mini-text'>{this.props.days[4].slice(0,5)}</p>
-                        <p className='axis-label mini-text'>{this.props.days[5].slice(0,5)}</p>
-                        <p className='axis-label mini-text'>{this.props.days[6].slice(0,5)}</p>
+                        {this.props.days.map((day) => <p className='axis-label mini-text'>{day.slice(0,5)}</p>)}
                     </div> : <div/> }
                     <div className='day-axis axis-name-container mini'>
                         <p className='axis-name'>Date</p>
