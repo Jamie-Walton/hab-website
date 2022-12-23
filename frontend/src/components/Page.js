@@ -92,9 +92,9 @@ class Page extends React.Component {
                     name => Object.fromEntries(
                         [
                             ['name', name],
-                            ['none', (thresholds[name]) ? 0 : average(this.state.counts.map(c => c[name]))],
-                            ['below', (thresholds[name]) ? ( (average(this.state.counts.map(c => c[name])) < thresholds[name]) ? average(this.state.counts.map(c => c[name])) : 0 ) : 0],
-                            ['above', (thresholds[name]) ? ( (average(this.state.counts.map(c => c[name])) > thresholds[name]) ? average(this.state.counts.map(c => c[name])) : 0 ) : 0],
+                            ['none', (thresholds[name] !== null) ? 0 : average(this.state.counts.map(c => c[name]))],
+                            ['below', (thresholds[name] !== null) ? ( (average(this.state.counts.map(c => c[name])) < thresholds[name]) ? average(this.state.counts.map(c => c[name])) : 0 ) : 0],
+                            ['above', (thresholds[name] !== null) ? ( (average(this.state.counts.map(c => c[name])) > thresholds[name]) ? average(this.state.counts.map(c => c[name])) : 0 ) : 0],
                         ]
                         )
                     );
