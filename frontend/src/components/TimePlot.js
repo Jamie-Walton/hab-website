@@ -1,8 +1,36 @@
-import React from "react";
+import React, { PureComponent } from "react";
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Label } from 'recharts';
 import domtoimage from 'dom-to-image-improved';
 import ClassPlot from "./ClassPlot";
 
+
+class CustomizedAxisTick extends PureComponent {
+    render() {
+      const { x, y, stroke, payload } = this.props;
+      var i = this.props.ticks.indexOf(payload.value);
+      var label = '';
+      if (this.props.days[i]) {
+          label = this.props.days[i].slice(0,5);
+      }
+
+      if (this.props.ticks.length > 20) {
+          var filtered = this.props.ticks.filter((t,j) => (j%2==0));
+          if (filtered.includes(payload.value)) {
+              label = this.props.days[i].slice(0,5);
+          } else {
+              label = '';
+          }
+      }
+
+        return (
+            <g transform={`translate(${x},${y})`}>
+                <text x={0} y={0} dy={16} textAnchor="end" fill="#666" transform="rotate(-35)">
+                {label}
+                </text>
+            </g>
+            );
+    }
+  }
 
 class TimePlot extends React.Component {
   
@@ -10,6 +38,7 @@ class TimePlot extends React.Component {
       super(props);
       this.state = {
           data: [],
+          ticks: [],
           key: 1,
           colors: {
             Akashiwo: '#eb9902',
@@ -197,11 +226,12 @@ class TimePlot extends React.Component {
                             dataKey="name"
                             height={50}
                             type="number"
-                            tickCount={26}
+                            tick={<CustomizedAxisTick days={this.props.days} ticks={this.props.ticks}/>}
+                            ticks={this.props.ticks}
+                            tickCount={100}
                             interval={0}
-                            hide={true}
-                            domain={[0,604800]}
-                            label={{ value: 'Time', position: 'insideBottom' }}>
+                            hide={false}
+                            domain={[0,604800]}>
                         </XAxis>
                         <YAxis key={this.props.key} label={{ value: 'Cell Count (c/mL)', angle: -90, position: 'insideLeft' }} />
                         <Tooltip 
@@ -242,10 +272,6 @@ class TimePlot extends React.Component {
                             <div/>
                         }
                     </LineChart> : <div/>}
-                    {this.props.days.length > 0 ?
-                    <div className='day-axis'>
-                        {this.props.days.map((day) => <p className='axis-label'>{day.slice(0,5)}</p>)}
-                    </div> : <div/> }
                     <div className='day-axis axis-name-container'>
                         <p className='axis-name'>Date</p>
                     </div>
@@ -262,33 +288,39 @@ class TimePlot extends React.Component {
                     </div>
                     : <div/>}
                 {(this.state.showTotal) ? <div/> :
-                <LineChart 
-                    width={725} height={350} 
-                    data={this.props.counts.map(data => Object.fromEntries([['Total', data['Total']], ["name",data['name']], ["Threshold", null]]))} 
-                    key={this.props.key} ref={(chart) => this.currentChart = chart}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis 
-                        key={this.props.key} 
-                        dataKey="name"
-                        height={50}
-                        type="number"
-                        tickCount={26}
-                        interval={0}
-                        hide={true}
-                        domain={[0,604800]}
-                        label={{ value: 'Time', position: 'insideBottom' }}>
-                    </XAxis>
-                    <YAxis key={this.props.key} label={{ value: 'Cell Count (c/mL)', angle: -90, position: 'insideLeft' }} />
-                    <Legend 
-                        content={renderTotalLegend}
-                        layout="vertical" 
-                        verticalAlign="top" 
-                        align="right" 
-                        wrapperStyle={{margin:'0 -20px', cursor: 'pointer'}} 
-                        iconType="rect" >
-                    </Legend>
-                    <Line type="monotone" className="line" dot={false} id="Total" dataKey="Total" name="Total" isAnimationActive={false} stroke={this.state.colors.Total} strokeWidth={1.5}/>
-                </LineChart>
+                <div style={{margin:'20px 0 0 0'}}>
+                    <LineChart 
+                        width={725} height={350} 
+                        data={this.props.counts.map(data => Object.fromEntries([['Total', data['Total']], ["name",data['name']], ["Threshold", null]]))} 
+                        key={this.props.key} ref={(chart) => this.currentChart = chart}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis 
+                            key={this.props.key} 
+                            dataKey="name"
+                            height={50}
+                            type="number"
+                            tick={<CustomizedAxisTick days={this.props.days} ticks={this.props.ticks}/>}
+                            ticks={this.props.ticks}
+                            tickCount={100}
+                            interval={0}
+                            hide={false}
+                            domain={[0,604800]}>
+                        </XAxis>
+                        <YAxis key={this.props.key} label={{ value: 'Cell Count (c/mL)', angle: -90, position: 'insideLeft' }} />
+                        <Legend 
+                            content={renderTotalLegend}
+                            layout="vertical" 
+                            verticalAlign="top" 
+                            align="right" 
+                            wrapperStyle={{margin:'0 -20px', cursor: 'pointer'}} 
+                            iconType="rect" >
+                        </Legend>
+                        <Line type="monotone" className="line" dot={false} id="Total" dataKey="Total" name="Total" isAnimationActive={false} stroke={this.state.colors.Total} strokeWidth={1.5}/>
+                    </LineChart>
+                    <div className='day-axis axis-name-container'>
+                        <p className='axis-name'>Date</p>
+                    </div>
+                </div>
                 }
             </div>
         );

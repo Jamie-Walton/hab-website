@@ -48,6 +48,7 @@ def wrap_data(start_date, end_date, dates, classcount, mL, hab_list):
     empties = False
     days = range(start_date, end_date+1)
     day_strings = []
+    seconds_ticks = []
     for daynum in range(0,len(days)):
         day = days[daynum]
         day_strings += [matlab2datetime(day).strftime('%m/%d/%Y')]
@@ -66,9 +67,11 @@ def wrap_data(start_date, end_date, dates, classcount, mL, hab_list):
             entry['timestamp'] = matlab2datetime(timestamps[f][0]).strftime("%m/%d/%Y, %H:%M:%S")
             entry['Total'] = sum(final_counts)
             weekcounts += [entry]
+            seconds_ticks += [86400*daynum]
     data = {'counts': weekcounts,
             'empties': empties,
             'days': day_strings,
+            'seconds_ticks': np.ndarray.tolist(np.unique(seconds_ticks)),
             }
 
     return data

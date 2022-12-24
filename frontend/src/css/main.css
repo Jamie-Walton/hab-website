@@ -273,9 +273,13 @@ li {
 }
 
 .error {
-    display: hide;
+    display: none;
 }
 
 .show-error {
     display: flex;
+}
+
+.hide {
+    display: none;
 }

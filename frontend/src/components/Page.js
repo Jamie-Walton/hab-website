@@ -11,6 +11,7 @@ class Page extends React.Component {
       this.state = {
           counts: [],
           days: [],
+          ticks: [],
           week: 1,
           weekName: "",
           timekey: 1,
@@ -26,6 +27,7 @@ class Page extends React.Component {
                 .then((res) => {
                     const counts = res.data.counts;
                     const days = res.data.days;
+                    const ticks = res.data.seconds_ticks;
                     if (res.data.empties) {
                         for (let i = 0; i < counts.length; i++) {
                             Object.keys(counts[i]).forEach((key, index) => {
@@ -38,6 +40,7 @@ class Page extends React.Component {
                     this.setState({
                         counts: counts,
                         days: days,
+                        ticks: ticks,
                         weekName: `${days[0]} to ${days[6]}`,
                         timekey: this.state.timekey + 1,
                         });
@@ -63,6 +66,8 @@ class Page extends React.Component {
                 .then((res) => {
                     const counts = res.data.counts;
                     const days = res.data.days;
+                    var ticks = res.data.seconds_ticks;
+
                     if (res.data.empties) {
                         for (let i = 0; i < counts.length; i++) {
                             Object.keys(counts[i]).forEach((key, index) => {
@@ -77,6 +82,7 @@ class Page extends React.Component {
                         days: days,
                         weekName: `${days[0]} to ${days[days.length-1]}`,
                         timekey: this.state.timekey + 1,
+                        ticks: ticks,
                         });
 
                     });
@@ -141,6 +147,7 @@ class Page extends React.Component {
                         counts={this.state.counts}
                         days={this.state.days}
                         thresholds={thresholds}
+                        ticks={this.state.ticks}
                         key={this.state.timekey}
                         showIndividuals={this.state.showIndividuals}
                         hideTotal={this.state.hideTotal}
