@@ -49,9 +49,12 @@ def wrap_data(start_date, end_date, dates, classcount, mL, hab_list):
     days = range(start_date, end_date+1)
     day_strings = []
     seconds_ticks = []
+    new_start = None
     for daynum in range(0,len(days)):
         day = days[daynum]
         day_strings += [matlab2datetime(day).strftime('%m/%d/%Y')]
+        if (day_strings[0][6:10] != day_strings[len(day_strings)-1][6:10]) and not new_start:
+            [new_start, dates, classcount, mL, hab_list] = load_data(start_date=day)
         same_day_indices = np.where(np.floor(dates)==day)[0]
         timestamps = dates[same_day_indices, :]
         day_count = classcount[same_day_indices, :]
