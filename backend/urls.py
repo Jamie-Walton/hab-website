@@ -15,10 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from hab import views
-from django.urls import path
+from django.urls import path, re_path
+from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('load/<int:week>/', views.load_by_week),
-    path('load/<str:start_date>/<str:end_date>/', views.load_by_range)
+    path('load/<str:start_date>/<str:end_date>/', views.load_by_range),
+    re_path('.*',TemplateView.as_view(template_name='index.html')),
 ]
