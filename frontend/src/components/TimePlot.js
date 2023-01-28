@@ -66,6 +66,9 @@ class TimePlot extends React.Component {
     }
 
     filterFor(species) {
+        if(species=='Alexandrium') {
+            var species = 'Alexandrium_singlet';
+        }
         const data = this.props.counts.map(t => ({ name: t.name, [species]: t[species], timestamp: t.timestamp, Threshold: this.props.thresholds[species] }))
         this.setState({ 
             data: data,
@@ -215,7 +218,6 @@ class TimePlot extends React.Component {
             <div>
                 <div style={{display: 'flex'}}>
                     <div className="download-button" onClick={() => this.downloadImage()}>Download</div>
-                    <div className="download-button" onClick={() => this.toggleTotal()}>Toggle Total</div>
                 </div>
                 <div id="plot">
                     {(this.state.data) ?
@@ -233,7 +235,7 @@ class TimePlot extends React.Component {
                             hide={false}
                             domain={[0,604800]}>
                         </XAxis>
-                        <YAxis key={this.props.key} label={{ value: 'Cell Count (c/mL)', angle: -90, position: 'insideLeft' }} />
+                        <YAxis key={this.props.key} label={{ value: 'Average Cell Count (c/mL)', angle: -90, position: 'insideLeft' }} />
                         <Tooltip 
                             content={<CustomTooltip />} 
                             itemStyle={{backgroundColor:'#FFFFFF', color:'#777777'}} 
@@ -253,7 +255,7 @@ class TimePlot extends React.Component {
                             onClick={(label) => this.filterFor(label.dataKey)}>
                         </Legend>
                         <Line type="monotone" className="line" dot={false} id="Akashiwo" dataKey="Akashiwo" isAnimationActive={false} stroke={this.state.colors.Akashiwo} strokeWidth={1.7} />
-                        <Line type="monotone" className="line" dot={false} id="Alexandrium_singlet" dataKey="Alexandrium_singlet" isAnimationActive={false} stroke={this.state.colors.Alexandrium} strokeWidth={1.7}/>
+                        <Line type="monotone" className="line" dot={false} id="Alexandrium_singlet" dataKey="Alexandrium_singlet" name="Alexandrium" isAnimationActive={false} stroke={this.state.colors.Alexandrium} strokeWidth={1.7}/>
                         <Line type="monotone" className="line" dot={false} id="Ceratium" dataKey="Ceratium" isAnimationActive={false} stroke={this.state.colors.Ceratium} strokeWidth={1.7}/>
                         <Line type="monotone" className="line" dot={false} id="Dinophysis" dataKey="Dinophysis" isAnimationActive={false} stroke={this.state.colors.Dinophysis} strokeWidth={1.7}/>
                         <Line type="monotone" className="line" dot={false} id="Cochlodinium" dataKey="Cochlodinium" isAnimationActive={false} stroke={this.state.colors.Cochlodinium} strokeWidth={1.7}/>
@@ -287,41 +289,6 @@ class TimePlot extends React.Component {
                         )}
                     </div>
                     : <div/>}
-                {(this.state.showTotal) ? <div/> :
-                <div style={{margin:'20px 0 0 0'}}>
-                    <LineChart 
-                        width={725} height={350} 
-                        data={this.props.counts.map(data => Object.fromEntries([['Total', data['Total']], ["name",data['name']], ["Threshold", null]]))} 
-                        key={this.props.key} ref={(chart) => this.currentChart = chart}>
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis 
-                            key={this.props.key} 
-                            dataKey="name"
-                            height={50}
-                            type="number"
-                            tick={<CustomizedAxisTick days={this.props.days} ticks={this.props.ticks}/>}
-                            ticks={this.props.ticks}
-                            tickCount={100}
-                            interval={0}
-                            hide={false}
-                            domain={[0,604800]}>
-                        </XAxis>
-                        <YAxis key={this.props.key} label={{ value: 'Cell Count (c/mL)', angle: -90, position: 'insideLeft' }} />
-                        <Legend 
-                            content={renderTotalLegend}
-                            layout="vertical" 
-                            verticalAlign="top" 
-                            align="right" 
-                            wrapperStyle={{margin:'0 -20px', cursor: 'pointer'}} 
-                            iconType="rect" >
-                        </Legend>
-                        <Line type="monotone" className="line" dot={false} id="Total" dataKey="Total" name="Total" isAnimationActive={false} stroke={this.state.colors.Total} strokeWidth={1.7}/>
-                    </LineChart>
-                    <div className='day-axis axis-name-container'>
-                        <p className='axis-name'>Date</p>
-                    </div>
-                </div>
-                }
             </div>
         );
     }

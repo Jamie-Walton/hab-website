@@ -119,7 +119,7 @@ class Page extends React.Component {
                 Object.keys(thresholds).map( 
                     name => Object.fromEntries(
                         [
-                            ['name', name],
+                            ['name', name=='Alexandrium_singlet' ? 'Alexandrium' : name],
                             ['none', (thresholds[name] !== null) ? 0 : average(this.state.counts.map(c => c[name]))],
                             ['below', (thresholds[name] !== null) ? ( (average(this.state.counts.map(c => c[name])) < thresholds[name]) ? average(this.state.counts.map(c => c[name])) : 0 ) : 0],
                             ['above', (thresholds[name] !== null) ? ( (average(this.state.counts.map(c => c[name])) > thresholds[name]) ? average(this.state.counts.map(c => c[name])) : 0 ) : 0],
@@ -170,7 +170,13 @@ class Page extends React.Component {
                     </div>
                 </div>
                 <div className='footer'>
-                    <p className='disclaimer'><b>Note:</b> This is real time data from an automated classifier. Cell identification and concentrations are not necessarily manually confirmed.</p>
+                    <h2 className="subheading footer-heading">Kudela Lab</h2>
+                    <div className="footer-links">
+                        <a className="footer-link" href="http://oceandatacenter.ucsc.edu/">Lab Website</a>
+                        <p className="link-divider">|</p>
+                        <a className="footer-link" href="http://akashiwo.oceandatacenter.ucsc.edu:8000/">IFCB Dashboard</a>
+                    </div>
+                    <p className='disclaimer'><b>Disclaimer:</b> We are providing these data as a service to interested parties. Our goal is to deliver a near-real time summary of potentially harmful algal species in the water.  Cell identification data are from an automated classifier.  The IDs and concentrations are not necessarily manually confirmed and there may be errors.</p>
                 </div>
             </div>
         );

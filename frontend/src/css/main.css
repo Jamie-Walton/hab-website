@@ -79,6 +79,8 @@ p {
     color: #FFFFFF;
     margin: 10px auto;
     width: fit-content;
+    font-size: 14px;
+    letter-spacing: 0.4px;
 }
 
 .page-title {
@@ -89,19 +91,42 @@ p {
 .footer {
     background-color: #8f94a1;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: left;
     width: 100%;
-    padding: 50px 0px 70px;
+    padding: 80px 0px 70px 90px;
+}
+
+.footer-heading {
+    margin: 0 0 5px 0;
+    font-size: 18px;
+}
+
+.footer-links {
+    display: flex;
+}
+
+.footer-link {
+    font-family: proxima-nova, sans-serif;
+    color: #FFFFFF;
+    font-size: 14px;
+    margin: 0 16px 0 0;
+}
+
+.link-divider {
+    font-family: proxima-nova, sans-serif;
+    color: #FFFFFF;
+    font-size: 14px;
+    margin: 0 16px 0 0;
 }
 
 .disclaimer {
-    margin: 40px 0 0 0;
-    width: 400px;
-    align-self: center;
+    width: 550px;
+    font-size: 13px !important;
     color: #FFFFFF;
-    text-align: center;
-    font-style: italic;
+    text-align: left;
     font-size: 12px;
+    margin: 25px 0 0 0;
 }
 
 .day-arrow {
@@ -258,7 +283,7 @@ li {
 .date {
     margin: 0 7px;
     padding: 5px 15px;
-    width: 60px;
+    width: 65px;
     height: 100%;
 	border: 1px solid #DEDDDD;
 	border-radius: 30px;

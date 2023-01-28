@@ -68,7 +68,7 @@ class DatePicker extends React.Component {
             this.setState({ startDate: startDate });
         }
         if (endDateSplit[2].length == 2) {
-            endDate = endDate.slice(0,6) + '20' + endDate.slice(6,8);
+            endDate = endDate.slice(0,5) + '20' + endDate.slice(5,8);
             this.setState({ endDate: endDate });
         }
 

@@ -42,10 +42,11 @@ class TotalPlot extends React.Component {
                 <div id="total-plot">
                     <BarChart width={700} height={300} data={this.props.averages}>
                         <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="name" angle={-25} textAnchor="end" height={60} allowDataOverFlow={true} minTickGap={-40}>
+                        <XAxis 
+                            dataKey="name" angle={-25} textAnchor="end" height={60} allowDataOverFlow={true} minTickGap={-40}>
                             <Label value="HAB Species" offset={-40} position="insideBottom" />
                         </XAxis>
-                        <YAxis label={{ value: 'Cell Count (c/mL)', angle: -90, position: 'insideLeft' }} />
+                        <YAxis label={{ value: 'Average Cell Count (c/mL)', angle: -90, position: 'insideLeft' }} />
                         <Tooltip 
                             content={<CustomTooltip />} 
                             itemStyle={{backgroundColor:'#FFFFFF', color:'#777777'}} 
@@ -54,7 +55,7 @@ class TotalPlot extends React.Component {
                             }}
                             cursor={{ fill: 'rgba(206, 206, 206, 0.3)' }}
                                 />
-                        <Legend layout="vertical" verticalAlign="top" align="right" wrapperStyle={{margin:'0 -20px'}} />
+                        <Legend layout="vertical" verticalAlign="top" align="right" wrapperStyle={{margin:'0 -20px'}}  />
                         <Bar dataKey="below" name="Below Warning Threshold" stackId="a" fill="#c7c7d1" />
                         <Bar dataKey="none" name="No Warning Threshold" stackId="a" fill="#8ab3cf" />
                         <Bar dataKey="above" name="Above Warning Threshold" stackId="a" fill="#2458DE" />
