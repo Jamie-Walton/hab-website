@@ -104,5 +104,34 @@ def load_by_range(request, start_date, end_date):
     return JsonResponse(data)
 
 
+@api_view(('GET',))
+def load_warnings(request):
+    thresholds = {
+        "Alexandrium_singlet": 0,
+        "Dinophysis": 0.5,
+        "Pseudo-nitzschia": 10,
+        "Pennate": 10,
+    }
+    files = [f for f in os.listdir('IFCB104/summary/v1_27August2019') if 'summary_all' in f]
+    mat = scipy.io.loadmat(f'IFCB104/summary/v1_27August2019/{max(files)}')
+    dates = mat['mdateTB']
+    classes = mat['class2useTB']
+    indices = [i for i in range(len(classes)) if classes[i][0][0] in thresholds.keys()]
+    mL = mat['ml_analyzedTB']
+    classcount = mat['classcountTB'][:, indices] / mL
+    data = wrap_data(int(dates[len(dates)-1,0]), int(dates[len(dates)-1,0]), dates, classcount, mL, thresholds.keys())
+
+    warnings = []
+    for name,threshold in thresholds.items():
+        counts = [d[name] for d in data['counts'] if d[name] > threshold]
+        if counts:
+            warnings.append(name)
+
+    warningPackage = {
+        'warnings': warnings,
+        'date': matlab2datetime(int(dates[len(dates)-1,0])).strftime("%m/%d/%y"),
+    }
+
+    return JsonResponse(warningPackage)
 
 

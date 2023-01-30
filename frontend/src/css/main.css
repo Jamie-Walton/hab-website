@@ -77,7 +77,7 @@ p {
 
 .description-heading {
     color: #FFFFFF;
-    margin: 10px auto;
+    margin: 10px auto 0 auto;
     width: fit-content;
     font-size: 14px;
     letter-spacing: 0.4px;
@@ -85,6 +85,34 @@ p {
 
 .page-title {
     color: #2458DE;
+}
+
+.warning-banner {
+    display: flex;
+    flex-direction: column;
+    background-color: #dfe4ec;
+}
+
+.warning-species {
+    color: #dd0000;
+    text-align: center;
+    
+    margin: 25px 0 0 0;
+}
+
+.warnings {
+    color: #dd0000;
+    text-align: center;
+    font-style: italic;
+    font-size: smaller;
+    margin: 0 0 25px 0;
+}
+
+.no-warnings {
+    color: #777777;
+    text-align: center;
+    font-style: italic;
+    margin: 25px 0 25px 0;
 }
 
 

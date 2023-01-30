@@ -17,6 +17,8 @@ class Page extends React.Component {
           timekey: 1,
           showIndividuals: false,
           hideTotal: false,
+          warnings: [],
+          warningDate: '',
       }
     }
 
@@ -53,6 +55,18 @@ class Page extends React.Component {
     
     componentDidMount() {
         this.loadData(this.state.week);
+        axios
+            .get('/load/warnings/')
+            .then(res => {
+                var resWarnings = res.data.warnings;
+                if (resWarnings.includes('Alexandrium_singlet')) {
+                    resWarnings.splice(resWarnings.indexOf('Alexandrium_singlet'), 1, 'Alexandrium');
+                }
+                this.setState({
+                    warnings: resWarnings,
+                    warningDate: res.data.date
+                });
+            })
     }
 
     nav(week) {
@@ -132,6 +146,22 @@ class Page extends React.Component {
 
         return(
             <div>
+                <div className="header">
+                    <h2 className="subheading">Kudela Lab</h2>
+                    <h1 className="main-heading">HAB Tracker</h1>
+                    <h3 className="description-heading">
+                    Keep track of harmful algae at the Santa Cruz Wharf in California.
+                    </h3>
+                </div>
+                {this.state.warnings ? 
+                <div className="warning-banner">
+                    <p className="warning-species">{this.state.warnings.join(', ')}</p>
+                    <p className="warnings">{`exceeded warning thresholds on ${this.state.warningDate}`}</p>
+                </div> :
+                <div className="warning-banner">
+                    <p className="no-warnings">{`No HAB species exceeded warning thresholds as of ${this.state.warningDate}`}</p>
+                </div>
+                }
                 <div className="page">
                     <h4 className="page-title">HAB Cell Concentration</h4>
                     <DatePicker 
