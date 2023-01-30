@@ -191,29 +191,6 @@ class TimePlot extends React.Component {
             );
           }
 
-          const renderTotalLegend = (props) => {
-            var { payload } = props;
-   
-            return (
-            <div>
-                <ul className="recharts-default-legend" style={{padding: "0px", margin: "0px", textAlign: "left"}}>
-                    {
-                    payload.map((entry, index) => (
-                        <li className="recharts-legend-item" key={`item-${index}`} onClick={() => this.filterFor(entry.value)}>
-                            <svg className="recharts-surface" width="14" height="14" viewBox="0 0 32 32" version="1.1" style={{display: "inlineBlock", verticalAlign: "middle", marginRight: "8px"}}>
-                                <title></title>
-                                <desc></desc>
-                                <path stroke="none" fill={entry.color} d="M0,4h32v24h-32z" className="recharts-legend-icon"></path>
-                            </svg>
-                            Total Cell Concentration
-                        </li>
-                    ))
-                    }
-                </ul>
-              </div>
-            );
-          }
-
         return (
             <div>
                 <div style={{display: 'flex'}}>
@@ -235,7 +212,7 @@ class TimePlot extends React.Component {
                             hide={false}
                             domain={[0,604800]}>
                         </XAxis>
-                        <YAxis key={this.props.key} label={{ value: 'Average Cell Count (c/mL)', angle: -90, position: 'insideLeft' }} />
+                        <YAxis key={this.props.key} label={{ value: 'Cell Count (c/mL)', angle: -90, position: 'insideLeft' }} />
                         <Tooltip 
                             content={<CustomTooltip />} 
                             itemStyle={{backgroundColor:'#FFFFFF', color:'#777777'}} 
