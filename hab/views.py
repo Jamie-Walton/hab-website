@@ -20,14 +20,14 @@ def load_data(start_date=None, week=None):
     hab_list = ['Akashiwo', 'Alexandrium_singlet', 'Ceratium', 'Dinophysis', \
                'Cochlodinium', 'Lingulodinium', 'Prorocentrum', \
                'Pseudo-nitzschia', 'Pennate']
-    files = [f for f in os.listdir('IFCB104/summary/v1_27August2019') if 'summary_all' in f]
-    mat = scipy.io.loadmat(f'IFCB104/summary/v1_27August2019/{max(files)}')
+    files = [f for f in os.listdir('summary') if 'summary_all' in f]
+    mat = scipy.io.loadmat(f'summary/{max(files)}')
     files = [f for f in files if f != max(files)]
     dates = mat['mdateTB']
     if not start_date:
         start_date = int(dates[len(dates)-1,0])-(7*week)
     while matlab2datetime(start_date).year != matlab2datetime(int(dates[0,0])).year and files:
-        mat = scipy.io.loadmat(f'IFCB104/summary/v1_27August2019/{max(files)}')
+        mat = scipy.io.loadmat(f'summary/{max(files)}')
         files = [f for f in files if f != max(files)]
         dates = mat['mdateTB']
     
@@ -112,8 +112,8 @@ def load_warnings(request):
         "Pseudo-nitzschia": 10,
         "Pennate": 10,
     }
-    files = [f for f in os.listdir('IFCB104/summary/v1_27August2019') if 'summary_all' in f]
-    mat = scipy.io.loadmat(f'IFCB104/summary/v1_27August2019/{max(files)}')
+    files = [f for f in os.listdir('summary') if 'summary_all' in f]
+    mat = scipy.io.loadmat(f'summary/{max(files)}')
     dates = mat['mdateTB']
     classes = mat['class2useTB']
     indices = [i for i in range(len(classes)) if classes[i][0][0] in thresholds.keys()]
