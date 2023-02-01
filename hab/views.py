@@ -17,25 +17,25 @@ def matlab2datetime(matlab_datenum):
 
 def load_data(start_date=None, week=None):
 
-    hab_list = ['Akashiwo', 'Alexandrium_singlet', 'Ceratium', 'Dinophysis', \
-               'Cochlodinium', 'Lingulodinium', 'Prorocentrum', \
-               'Pseudo-nitzschia', 'Pennate']
+    hab_list = ['Akashiwo', 'Alexandrium_singlet', 'Ceratium', 'Cochlodinium', \
+               'Dinophysis', 'Lingulodinium', 'Pennate', 'Prorocentrum', \
+               'Pseudo-nitzschia']
     files = [f for f in os.listdir('summary') if 'summary_all' in f]
     mat = scipy.io.loadmat(f'summary/{max(files)}')
     files = [f for f in files if f != max(files)]
     dates = mat['mdateTB']
     if not start_date:
         start_date = int(dates[len(dates)-1,0])-(7*week)
-    while matlab2datetime(start_date).year != matlab2datetime(int(dates[0,0])).year and files:
+    while (matlab2datetime(start_date).year != matlab2datetime(int(dates[0,0])).year) and files:
         mat = scipy.io.loadmat(f'summary/{max(files)}')
         files = [f for f in files if f != max(files)]
         dates = mat['mdateTB']
     
     classes = mat['class2useTB']
     indices = [i for i in range(len(classes)) if classes[i][0][0] in hab_list]
-    hab_list = ['Akashiwo', 'Alexandrium_singlet', 'Ceratium', 'Dinophysis', \
-               'Cochlodinium', 'Lingulodinium', 'Prorocentrum', \
-               'Pseudo_nitzschia', 'Pennate']
+    hab_list = ['Akashiwo', 'Alexandrium_singlet', 'Ceratium', 'Cochlodinium', \
+               'Dinophysis', 'Lingulodinium', 'Pennate', 'Prorocentrum', \
+               'Pseudo_nitzschia',]
     mL = mat['ml_analyzedTB']
     classcount = mat['classcountTB'][:, indices] / mL
 
@@ -58,10 +58,8 @@ def wrap_data(start_date, end_date, dates, classcount, mL, hab_list):
         same_day_indices = np.where(np.floor(dates)==day)[0]
         timestamps = dates[same_day_indices, :]
         day_count = classcount[same_day_indices, :]
-        day_mL = mL[same_day_indices, :]
-        file_counts = day_count/day_mL
-        for f in range(len(file_counts)):
-            file = file_counts[f]
+        for f in range(len(day_count)):
+            file = day_count[f]
             final_counts = np.ndarray.tolist(file)
             entry = {name:float(count) for name,count in zip(hab_list,final_counts)}
             time = matlab2datetime(timestamps[f][0]).strftime("%H:%M:%S").split(':')
@@ -85,7 +83,7 @@ def wrap_data(start_date, end_date, dates, classcount, mL, hab_list):
 def load_by_week(request, week):
 
     [start_date, dates, classcount, mL, hab_list] = load_data(week=week)
-    data = wrap_data(start_date, start_date+6, dates, classcount, mL, hab_list)
+    data = wrap_data(start_date, start_date+7, dates, classcount, mL, hab_list)
 
     return JsonResponse(data)
 
