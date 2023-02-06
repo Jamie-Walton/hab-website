@@ -4,6 +4,9 @@ import TotalPlot from './TotalPlot';
 import TimePlot from './TimePlot';
 import DatePicker from "./DatePicker";
 
+import logo from "../assets/logo.png";
+import logoWhite from "../assets/logo-white.png";
+
 class Page extends React.Component {
   
     constructor(props) {
@@ -147,11 +150,14 @@ class Page extends React.Component {
         return(
             <div>
                 <div className="header">
-                    <h2 className="subheading">Kudela Lab</h2>
-                    <h1 className="main-heading">HAB Tracker</h1>
-                    <h3 className="description-heading">
-                    Keep track of harmful algae at the Santa Cruz Wharf in California.
-                    </h3>
+                    <img className="header-logo" src={logoWhite} alt="Kudela Lab logo"></img>
+                    <div>
+                        <h2 className="subheading">Kudela Lab</h2>
+                        <h1 className="main-heading">HAB Tracker</h1>
+                        <h3 className="description-heading">
+                        Keep track of harmful algae at the Santa Cruz Wharf in California.
+                        </h3>
+                    </div>
                 </div>
                 {this.state.warnings ? 
                 <div className="warning-banner">
@@ -200,13 +206,15 @@ class Page extends React.Component {
                     </div>
                 </div>
                 <div className='footer'>
-                    <h2 className="subheading footer-heading">Kudela Lab</h2>
-                    <div className="footer-links">
-                        <a className="footer-link" href="http://oceandatacenter.ucsc.edu/">Lab Website</a>
-                        <p className="link-divider">|</p>
-                        <a className="footer-link" href="http://akashiwo.oceandatacenter.ucsc.edu:8000/">IFCB Dashboard</a>
+                    <div>
+                        <h2 className="subheading footer-heading">Kudela Lab</h2>
+                        <div className="footer-links">
+                            <a className="footer-link" href="http://akashiwo.oceandatacenter.ucsc.edu:8000/timeline?dataset=SCW">SCW IFCB Dashboard</a>
+                            <a className="footer-link" href="http://oceandatacenter.ucsc.edu/">Lab Website</a>
+                        </div>
+                        <p className='disclaimer'><b>Disclaimer:</b> We are providing these data as a service to interested parties. Our goal is to deliver a near-real time summary of potentially harmful algal species in the water.  Cell identification data are from an automated classifier.  The IDs and concentrations are not necessarily manually confirmed and there may be errors.</p>
                     </div>
-                    <p className='disclaimer'><b>Disclaimer:</b> We are providing these data as a service to interested parties. Our goal is to deliver a near-real time summary of potentially harmful algal species in the water.  Cell identification data are from an automated classifier.  The IDs and concentrations are not necessarily manually confirmed and there may be errors.</p>
+                    <img className="footer-logo" src={logo} alt="Kudela Lab logo"></img>
                 </div>
             </div>
         );

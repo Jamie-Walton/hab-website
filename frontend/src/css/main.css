@@ -7,15 +7,31 @@ body {
 }
 
 .page {
-    padding: 75px;
+    padding: 75px 75px 75px 100px;
     display: flex;
     flex-direction: column;
 }
 
 .header {
+    display: flex;
+    gap: 50px;
+    align-items: center;
     background-color: #2458DE;
-    padding: 50px 0;
+    padding: 50px 100px;
     box-shadow: 0px 4px 33px 6px rgba(0, 0, 0, 0.12);
+}
+
+.header-logo {
+    width: 200px;
+    height: 100%;
+}
+
+.header-text {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    gap: 10px;
+
 }
 
 h1 {
@@ -51,36 +67,36 @@ h4 {
 
 h5 {
     font-family: proxima-nova, sans-serif;
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 500;
     margin: 0 0 10px 30px;
 }
 
 p {
     font-family: proxima-nova, sans-serif;
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 200;
     color: #787785;
 }
 
 .subheading {
     color: #FFFFFF;
-    margin: 10px auto;
     width: fit-content;
+    margin: 0;
 }
 
 .main-heading {
     color: #FFFFFF;
-    margin: auto;
     width: fit-content;
+    margin: 0;
 }
 
 .description-heading {
     color: #FFFFFF;
-    margin: 10px auto 0 auto;
     width: fit-content;
-    font-size: 14px;
+    font-size: 16px;
     letter-spacing: 0.4px;
+    margin: 0;
 }
 
 .page-title {
@@ -91,26 +107,22 @@ p {
     display: flex;
     flex-direction: column;
     background-color: #dfe4ec;
+    padding: 0 0 0 100px;
 }
 
 .warning-species {
     color: #dd0000;
-    text-align: center;
-    
     margin: 25px 0 0 0;
 }
 
 .warnings {
     color: #dd0000;
-    text-align: center;
     font-style: italic;
-    font-size: smaller;
     margin: 0 0 25px 0;
 }
 
 .no-warnings {
     color: #777777;
-    text-align: center;
     font-style: italic;
     margin: 25px 0 25px 0;
 }
@@ -119,9 +131,9 @@ p {
 .footer {
     background-color: #8f94a1;
     display: flex;
-    flex-direction: column;
-    justify-content: left;
-    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
     padding: 80px 0px 70px 90px;
 }
 
@@ -130,30 +142,24 @@ p {
     font-size: 18px;
 }
 
-.footer-links {
-    display: flex;
+.footer-logo {
+    margin: 0 150px 0 0;
+    width: 250px;
+    height: 100%;
 }
 
 .footer-link {
     font-family: proxima-nova, sans-serif;
     color: #FFFFFF;
-    font-size: 14px;
-    margin: 0 16px 0 0;
-}
-
-.link-divider {
-    font-family: proxima-nova, sans-serif;
-    color: #FFFFFF;
-    font-size: 14px;
+    font-size: 15px;
     margin: 0 16px 0 0;
 }
 
 .disclaimer {
     width: 550px;
-    font-size: 13px !important;
+    font-size: 15px !important;
     color: #FFFFFF;
     text-align: left;
-    font-size: 12px;
     margin: 25px 0 0 0;
 }
 
@@ -176,7 +182,7 @@ p {
 
 text {
     font-family: proxima-nova, sans-serif;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 300;
 }
 
@@ -187,7 +193,7 @@ line {
 
 .recharts-legend-item-text {
     font-family: proxima-nova, sans-serif;
-    font-size: 11px;
+    font-size: 13px;
     font-weight: 300;
     color: #777777 !important;
 }
@@ -199,7 +205,7 @@ line {
 
 .desc {
     margin: 0;
-    font-size: 11px;
+    font-size: 13px;
 }
 
 .biomass-desc {
@@ -209,7 +215,7 @@ line {
 }
 
 .filter-label {
-    font-size: 12px;
+    font-size: 13px;
     font-style: italic;
     color: #787785;
     font-weight: 600;
@@ -217,7 +223,7 @@ line {
 
 li {
     font-family: proxima-nova, sans-serif;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 200;
     list-style-type: none;
     color: #787785;
@@ -225,6 +231,10 @@ li {
 
 .recharts-legend-item:hover {
     color: #2458DE;
+}
+
+.recharts-legend-wrapper {
+    margin-left: 50px !important;
 }
 
 .unfilter-button {
@@ -255,7 +265,7 @@ li {
     border-radius: 15px;
     margin: 0 10px 30px 0;
     font-family: proxima-nova, sans-serif;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 200;
     color: #FFFFFF;
     text-transform: uppercase;
@@ -288,13 +298,13 @@ li {
 }
 
 .axis-name {
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 600;
     color: #000000;
 }
 
 .axis-label {
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 300;
     color:#777777;
 }
@@ -316,7 +326,7 @@ li {
 	border: 1px solid #DEDDDD;
 	border-radius: 30px;
     font-family: proxima-nova, sans-serif;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 200;
     color: #787785;
 }
