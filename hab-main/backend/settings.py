@@ -28,7 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'odontella.oceandatacenter.ucsc.edu',
-    'oceandatacenter.ucsc.edu'
+    'oceandatacenter.ucsc.edu/HABTracker'
 ]
 
 
