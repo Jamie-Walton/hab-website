@@ -6,8 +6,6 @@ services:
     command: python -m gunicorn --bind :3000 --chdir hab-main/ backend.wsgi:application --reload
     volumes:
       - static_volume:/hab-website/hab-main/staticfiles
-    expose:
-      - 3000
 
   nginx:
     build: ./nginx
