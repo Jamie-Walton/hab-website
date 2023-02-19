@@ -1,0 +1,13 @@
+name: ifcb-classification-website
+channels:
+  - conda-forge
+dependencies:
+- python=3.9
+- django
+- gunicorn
+- pip
+- django-cors-headers
+- djangorestframework
+- requests
+- numpy
+- scipy
