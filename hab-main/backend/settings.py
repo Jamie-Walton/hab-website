@@ -28,7 +28,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'odontella.oceandatacenter.ucsc.edu',
-    'oceandatacenter.ucsc.edu/HABTracker',
+    'oceandatacenter.ucsc.edu:3000/HABTracker',
+    'eucampia.ucsc.edu:3000/HABTracker',
     'localhost'
 ]
 
