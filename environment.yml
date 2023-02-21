@@ -1,4 +1,4 @@
-name: ifcb-classification-website
+name: hab-website
 channels:
   - conda-forge
 dependencies:
