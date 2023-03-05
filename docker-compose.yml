@@ -3,7 +3,7 @@ version: "3.8"
 services:
   web:
     build: .
-    command: python -m gunicorn --bind :80 --chdir hab-main/ backend.wsgi:application --reload
+    command: python -m gunicorn --bind :443 --chdir hab-main/ backend.wsgi:application --reload
     volumes:
       - static_volume:/hab-website/hab-main/staticfiles
 
