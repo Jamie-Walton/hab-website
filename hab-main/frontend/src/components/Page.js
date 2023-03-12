@@ -148,7 +148,6 @@ class Page extends React.Component {
         }
 
         return(
-            <main>
             <div>
                 <div className="header">
                     <img className="header-logo" src={logoWhite} alt="Kudela Lab logo"></img>
@@ -218,7 +217,6 @@ class Page extends React.Component {
                     <img className="footer-logo" src={logo} alt="Kudela Lab logo"></img>
                 </div>
             </div>
-            </main>
         );
     }
 }

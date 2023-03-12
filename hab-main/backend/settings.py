@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
-import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,11 +26,8 @@ SECRET_KEY = 'django-insecure-+x0pvbtb-52xdq16!b6cu^(fndin*=29r#_49py5f3w=w@9ns(
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'odontella.oceandatacenter.ucsc.edu',
-    'oceandatacenter.ucsc.edu',
-    'eucampia.ucsc.edu',
-    'localhost',
-    'eucampia.ucsc.edu/HABTracker'
+    'odontella.oceandatacenter.ucsc.edu:8000',
+    'localhost'
 ]
 
 
@@ -61,7 +57,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'build')],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -124,15 +120,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'build/static')
-]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-# The URL to use when referring to static files (where they will be served from)
 STATIC_URL = '/static/'
-
-MEDIA_ROOT = os.path.join(BASE_DIR, 'build/static/media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
