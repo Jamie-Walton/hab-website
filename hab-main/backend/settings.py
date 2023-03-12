@@ -26,9 +26,9 @@ SECRET_KEY = 'django-insecure-+x0pvbtb-52xdq16!b6cu^(fndin*=29r#_49py5f3w=w@9ns(
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'odontella.oceandatacenter.ucsc.edu:3000',
-    'eucampia.ucsc.edu:3000',
-    'oceandatacenter.ucsc.edu:3000',
+    'odontella.oceandatacenter.ucsc.edu',
+    'eucampia.ucsc.edu',
+    'oceandatacenter.ucsc.edu',
     'localhost'
 ]
 
