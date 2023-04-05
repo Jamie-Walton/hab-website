@@ -185,8 +185,7 @@ class TimePlot extends React.Component {
                     }
                 </ul>
                 {this.state.showThreshold ? <p className="unfilter-button" onClick={() => this.unFilter()}>{'<    Back to All'}</p> : <div/>}
-                <div className="download-button" style={{margin: '20px 0 10px 0'}} onClick={() => this.props.toggleIndividuals()}>{this.props.showIndividuals ? 'Hide All' : 'Show All'}</div>
-                <div className="download-button" style={{marginTop: '0px'}} onClick={() => this.props.toggleTotal()}>{this.props.hideTotal ? 'Show Total' : 'Hide Total'}</div>
+                <div className="download-button" style={{marginTop: '20px'}} onClick={() => this.props.toggleTotal()}>{this.props.hideTotal ? 'Show Total' : 'Hide Total'}</div>
               </div>
             );
           }
@@ -195,6 +194,7 @@ class TimePlot extends React.Component {
             <div>
                 <div style={{display: 'flex'}}>
                     <div className="download-button" onClick={() => this.downloadImage()}>Download</div>
+                    <div className="download-button" style={{marginTop: '0'}} onClick={() => this.props.toggleIndividuals()}>{this.props.showIndividuals ? 'Hide All' : 'Show All'}</div>
                 </div>
                 <div id="plot">
                     {(this.state.data) ?

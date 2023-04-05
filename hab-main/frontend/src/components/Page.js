@@ -22,7 +22,17 @@ class Page extends React.Component {
           hideTotal: false,
           warnings: [],
           warningDate: '',
+          lastReportedData: '',
       }
+    }
+
+    calculateDate(seconds) {
+        if (this.state.days.length > 0) {
+            const datenum = Date.parse(this.state.days[0]) + seconds;
+            const date = new Date((datenum));
+            return date.toLocaleString();
+        }
+        
     }
 
     loadData(week) {
@@ -116,6 +126,14 @@ class Page extends React.Component {
         this.setState({ hideTotal: !this.state.hideTotal });
     }
 
+    renderThreshold(thresholds, key) {
+        if (thresholds[key] !== null) {
+            return(
+                <p className="threshold">{`${key}: ${thresholds[key]} c/mL`}</p>
+            );
+        }
+    }
+
     render() {
         const thresholds = {
             "Akashiwo": null,
@@ -159,15 +177,20 @@ class Page extends React.Component {
                         </h3>
                     </div>
                 </div>
-                {this.state.warnings ? 
-                <div className="warning-banner">
-                    <p className="warning-species">{this.state.warnings.join(', ')}</p>
-                    <p className="warnings">{`exceeded warning thresholds on ${this.state.warningDate}`}</p>
-                </div> :
-                <div className="warning-banner">
-                    <p className="no-warnings">{`No HAB species exceeded warning thresholds as of ${this.state.warningDate}`}</p>
+                <div className="header-banner">
+                    {this.state.warnings ? 
+                    <div className="warning-banner">
+                        <p className="warning-species">{this.state.warnings.join(', ')}</p>
+                        <p className="warnings">{`exceeded warning thresholds on ${this.state.warningDate}`}</p>
+                    </div> :
+                    <div className="warning-banner">
+                        <p className="no-warnings">{`No HAB species exceeded warning thresholds as of ${this.state.warningDate}`}</p>
+                    </div>
+                    }
+                    <div className="last-reported-data">
+                        <p>{`Last reported data: ${this.calculateDate(this.state.ticks[this.state.ticks.length - 1])} PST`}</p>
+                    </div>
                 </div>
-                }
                 <div className="page">
                     <h4 className="page-title">HAB Cell Concentration</h4>
                     <DatePicker 
@@ -203,6 +226,10 @@ class Page extends React.Component {
                         <TotalPlot
                             averages={averages}
                         />
+                    </div>
+                    <div className="thresholds-container">
+                        <p className="thresholds-header">Thresholds</p>
+                        {Object.keys(thresholds).map(key => this.renderThreshold(thresholds, key))}
                     </div>
                 </div>
                 <div className='footer'>

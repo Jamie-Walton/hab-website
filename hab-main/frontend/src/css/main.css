@@ -103,11 +103,17 @@ p {
     color: #2458DE;
 }
 
+.header-banner {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: #dfe4ec;
+    padding: 0 100px 0 100px;
+}
+
 .warning-banner {
     display: flex;
     flex-direction: column;
-    background-color: #dfe4ec;
-    padding: 0 0 0 100px;
 }
 
 .warning-species {
@@ -125,6 +131,33 @@ p {
     color: #777777;
     font-style: italic;
     margin: 25px 0 25px 0;
+}
+
+.last-reported-data {
+    position: absolute;
+    right: 100px;
+    color: #777777;
+}
+
+.thresholds-container {
+    background-color: #2458DE;
+    width: fit-content;
+    padding: 30px 40px;
+    margin: 30px 0 0 30px;
+}
+
+.thresholds-header {
+    color: #FFFFFF;
+    font-size: 15px;
+    font-weight: 600;
+    font-style: italic;
+    margin: 0 0 10px 0;
+}
+
+.threshold {
+    color: #FFFFFF;
+    font-size: 15px;
+    margin: 0;
 }
 
 
@@ -240,6 +273,11 @@ li {
 
 .recharts-legend-wrapper {
     margin-left: 50px !important;
+}
+
+.legend-buttons {
+    display: flex;
+    padding: 20px 0 0 0;
 }
 
 .unfilter-button {
