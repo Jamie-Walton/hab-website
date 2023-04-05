@@ -111,12 +111,12 @@ p {
 }
 
 .warning-species {
-    color: #dd0000;
+    color: #2458DE;
     margin: 25px 0 0 0;
 }
 
 .warnings {
-    color: #dd0000;
+    color: #2458DE;
     font-style: italic;
     margin: 0 0 25px 0;
 }
@@ -144,7 +144,7 @@ p {
 
 .footer-logo {
     margin: 0 200px 0 0;
-    width: 300px;
+    width: 250px;
     height: 100%;
 }
 

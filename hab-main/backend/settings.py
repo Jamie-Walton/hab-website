@@ -26,6 +26,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'eucampia.ucsc.edu',
     'oceandatacenter.ucsc.edu',
+    'localhost'
 ]
 
 
