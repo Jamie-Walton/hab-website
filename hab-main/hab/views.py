@@ -48,3 +48,17 @@ def load_warnings(request, lab_name):
     return JsonResponse(lab.load_warnings())
 
 
+@api_view(('GET',))
+def load_info(request, lab_name):
+
+    lab_directory = make_labs()
+    lab = lab_directory[lab_name]
+
+    info = {
+        "hab_list": lab.display_list,
+        "hab_thresholds": lab.hab_thresholds
+    }
+
+    return JsonResponse(info)
+
+

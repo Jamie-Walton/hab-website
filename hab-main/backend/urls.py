@@ -23,5 +23,6 @@ urlpatterns = [
     path('load/<str:lab_name>/<int:week>/', views.load_by_week),
     path('load/<str:lab_name>/<str:start_date>/<str:end_date>/', views.load_by_range),
     path('load/warnings/<str:lab_name>/', views.load_warnings),
+    path('load/info/<str:lab_name>/', views.load_info),
     re_path('.*',TemplateView.as_view(template_name='index.html')),
 ]

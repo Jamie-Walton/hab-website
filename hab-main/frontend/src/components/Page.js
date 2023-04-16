@@ -9,6 +9,8 @@ class Page extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
+          habList: [],
+          thresholds: {},
           counts: [],
           days: [],
           ticks: [],
@@ -35,7 +37,7 @@ class Page extends React.Component {
     loadData(week) {
         try {
             axios
-                .get('/load/kudela/' + week +'/')
+                .get(`/load/${this.props.name}/` + week +'/')
                 .then((res) => {
                     const counts = res.data.counts;
                     const days = res.data.days;
@@ -66,7 +68,7 @@ class Page extends React.Component {
     componentDidMount() {
         this.loadData(this.state.week);
         axios
-            .get('/load/warnings/kudela/')
+            .get(`/load/warnings/${this.props.name}/`)
             .then(res => {
                 var resWarnings = res.data.warnings;
                 if (resWarnings.includes('Alexandrium_singlet')) {
@@ -77,6 +79,24 @@ class Page extends React.Component {
                     warningDate: res.data.date
                 });
             })
+
+        axios
+            .get(`/load/info/${this.props.name}/`)
+            .then(res => {
+                const habList = res.data.hab_list;
+                var thresholds = {};
+                for (let i = 0; i < habList.length; i++) {
+                    if (habList[i] in res.data.hab_thresholds) {
+                        thresholds[habList[i]] = res.data.hab_thresholds[habList[i]];
+                    } else {
+                        thresholds[habList[i]] = null;
+                    }
+                }
+                this.setState({
+                    habList: habList,
+                    thresholds: thresholds,
+                });
+            });
     }
 
     nav(week) {
@@ -86,7 +106,7 @@ class Page extends React.Component {
     loadDateRange(start, end) {
         try {
             axios
-                .get(`/load/kudela/${start.split('/').join('')}/${end.split('/').join('')}/`)
+                .get(`/load/${this.props.name}/${start.split('/').join('')}/${end.split('/').join('')}/`)
                 .then((res) => {
                     const counts = res.data.counts;
                     const days = res.data.days;
@@ -132,29 +152,18 @@ class Page extends React.Component {
     }
 
     render() {
-        const thresholds = {
-            "Akashiwo": null,
-            "Alexandrium_singlet": 0,
-            "Ceratium": null,
-            "Dinophysis": 0.5,
-            "Cochlodinium": null,
-            "Lingulodinium": null,
-            "Prorocentrum": null,
-            "Pseudo_nitzschia": 10,
-            "Pennate": 10,
-        };
 
         const average = array => array.reduce((a, b) => a + b) / array.length;
         
         if (this.state.counts.length > 0) {
             var averages = 
-                Object.keys(thresholds).map( 
+                Object.keys(this.state.thresholds).map( 
                     name => Object.fromEntries(
                         [
-                            ['name', name=='Alexandrium_singlet' ? 'Alexandrium' : name],
-                            ['none', (thresholds[name] !== null) ? 0 : average(this.state.counts.map(c => c[name]))],
-                            ['below', (thresholds[name] !== null) ? ( (average(this.state.counts.map(c => c[name])) < thresholds[name]) ? average(this.state.counts.map(c => c[name])) : 0 ) : 0],
-                            ['above', (thresholds[name] !== null) ? ( (average(this.state.counts.map(c => c[name])) > thresholds[name]) ? average(this.state.counts.map(c => c[name])) : 0 ) : 0],
+                            ['name', name=='Alexandrium_singlet' ? 'Alexandrium' : name], // TODO: Fix hardcode!
+                            ['none', (this.state.thresholds[name] !== null) ? 0 : average(this.state.counts.map(c => c[name]))],
+                            ['below', (this.state.thresholds[name] !== null) ? ( (average(this.state.counts.map(c => c[name])) < this.state.thresholds[name]) ? average(this.state.counts.map(c => c[name])) : 0 ) : 0],
+                            ['above', (this.state.thresholds[name] !== null) ? ( (average(this.state.counts.map(c => c[name])) > this.state.thresholds[name]) ? average(this.state.counts.map(c => c[name])) : 0 ) : 0],
                         ]
                         )
                     );
@@ -189,10 +198,11 @@ class Page extends React.Component {
                     />
                 <div className="daily-plot">
                     {(this.state.counts) ?
-                    <TimePlot 
+                    <TimePlot
+                        habList={this.state.habList}
                         counts={this.state.counts}
                         days={this.state.days}
-                        thresholds={thresholds}
+                        thresholds={this.state.thresholds}
                         ticks={this.state.ticks}
                         key={this.state.timekey}
                         showIndividuals={this.state.showIndividuals}
@@ -216,7 +226,7 @@ class Page extends React.Component {
                     </div>
                     <div className="thresholds-container">
                         <p className="thresholds-header">Thresholds</p>
-                        {Object.keys(thresholds).map(key => this.renderThreshold(thresholds, key))}
+                        {Object.keys(this.state.thresholds).map(key => this.renderThreshold(this.state.thresholds, key))}
                     </div>
                 </div>
             </div>

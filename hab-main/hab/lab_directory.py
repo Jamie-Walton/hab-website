@@ -23,13 +23,11 @@ def make_labs():
         data_path = "boulder", 
         hab_list = [
             'Akashiwo', 'Alexandrium_singlet', 'Ceratium', 'Cochlodinium', \
-            'Dinophysis', 'Lingulodinium', 'Pennate', 'Prorocentrum', \
-            'Pseudo-nitzschia'
+            'Dinophysis', 'Pennate', 'Prorocentrum',
         ], 
         hab_thresholds = {
             "Alexandrium_singlet": 0,
             "Dinophysis": 0.5,
-            "Pseudo-nitzschia": 10,
             "Pennate": 10,
         }
     )

@@ -20,7 +20,7 @@ class BoulderLab extends React.Component {
                         </h3>
                     </div>
                 </div>
-                {<Page/>}
+                {<Page name="boulder"/>}
                 <div className='footer'>
                     <div>
                         <h2 className="subheading footer-heading">Boulder Lab</h2>

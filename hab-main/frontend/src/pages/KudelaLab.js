@@ -20,7 +20,7 @@ class KudelaLab extends React.Component {
                         </h3>
                     </div>
                 </div>
-                {<Page/>}
+                {<Page name="kudela"/>}
                 <div className='footer'>
                     <div>
                         <h2 className="subheading footer-heading">Kudela Lab</h2>
