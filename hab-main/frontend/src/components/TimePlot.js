@@ -132,7 +132,7 @@ class TimePlot extends React.Component {
             if (active && payload && payload.length) {
                 return (
                 <div className="custom-tooltip">
-                    <p className="label">{`${payload[0].payload.timestamp}`}</p>
+                    <p className="label">{`${payload[0].payload.timestamp} GMT`}</p>
                     {this.state.filtered ?
                     <p className="desc">{`${this.state.filtered}: ${((payload[0].payload[this.state.filtered]).toFixed(2))} c/mL`}</p> :
                     <div>
@@ -229,7 +229,7 @@ class TimePlot extends React.Component {
                         }
                     </LineChart> : <div/>}
                     <div className='day-axis axis-name-container'>
-                        <p className='axis-name'>Date</p>
+                        <p className='axis-name'>Date (GMT)</p>
                     </div>
                 </div>
                 {this.props.showIndividuals ? 

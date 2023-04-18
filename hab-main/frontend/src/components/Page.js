@@ -29,7 +29,7 @@ class Page extends React.Component {
         if (this.state.days.length > 0) {
             const datenum = Date.parse(this.state.days[0]) + seconds;
             const date = new Date((datenum));
-            return date.toLocaleString();
+            return date.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
         }
         
     }
