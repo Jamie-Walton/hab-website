@@ -40,19 +40,8 @@ class TimePlot extends React.Component {
           data: [],
           ticks: [],
           key: 1,
-          colors: {
-            Akashiwo: '#eb9902',
-            Alexandrium: '#ebc802',
-            Ceratium: '#97b504',
-            Dinophysis: '#15b504',
-            Cochlodinium: '#02bab1',
-            Lingulodinium: '#0282de',
-            Prorocentrum: '#1902c9',
-            Pseudo_nitzschia: '#8e02c9',
-            Pennate: '#c902af',
-            Threshold: '#ba023c',
-            Total: '#cfd2d4'
-        },
+          colors: ['#eb9902', '#ebc802', '#97b504', '#15b504', '#02bab1', '#0282de',
+                   '#1902c9', '#8e02c9', '#c902af'], // TODO: Add more colors
           showThreshold: false,
           showTotal: true,
           filtered: '',
@@ -67,7 +56,7 @@ class TimePlot extends React.Component {
 
     filterFor(species) {
         if(species=='Alexandrium') {
-            var species = 'Alexandrium_singlet';
+            var species = 'Alexandrium_singlet'; // TODO: Fix hardcode!
         }
         const data = this.props.counts.map(t => ({ name: t.name, [species]: t[species], timestamp: t.timestamp, Threshold: this.props.thresholds[species] }))
         this.setState({ 
@@ -120,18 +109,21 @@ class TimePlot extends React.Component {
       renderLegendSVG() {
         return (
             <svg>
-                {this.renderLegendItemSVG('Akashiwo', 10)}
-                {this.renderLegendItemSVG('Alexandrium', 28)}
-                {this.renderLegendItemSVG('Ceratium', 46)}
-                {this.renderLegendItemSVG('Dinophysis', 64)}
-                {this.renderLegendItemSVG('Cochlodinium', 82)}
-                {this.renderLegendItemSVG('Lingulodinium', 100)}
-                {this.renderLegendItemSVG('Prorocentrum', 118)}
-                {this.renderLegendItemSVG('Pseudo_nitzschia', 136)}
-                {this.renderLegendItemSVG('Pennate', 154)}
-                {this.renderLegendItemSVG('Threshold', 172)}
+                {this.props.habList.map((hab, i) => this.renderLegendSVG(hab, i*18+10))}
             </svg>
         );
+      }
+
+      renderTooltipDesc(name, payload) {
+        return (
+            <p className="desc">{`${name}: ${((payload[0].payload[name]).toFixed(2))} c/mL`}</p>
+        );
+      }
+
+      renderLine(name, i) {
+          return(
+            <Line type="monotone" className="line" dot={false} id={name} dataKey={name} isAnimationActive={false} stroke={this.state.colors[i]} strokeWidth={1.7} />
+          );
       }
 
     render() {
@@ -144,14 +136,7 @@ class TimePlot extends React.Component {
                     {this.state.filtered ?
                     <p className="desc">{`${this.state.filtered}: ${((payload[0].payload[this.state.filtered]).toFixed(2))} c/mL`}</p> :
                     <div>
-                        <p className="desc">{`Akashiwo: ${((payload[0].payload.Akashiwo).toFixed(2))} c/mL`}</p>
-                        <p className="desc">{`Alexandrium: ${((payload[0].payload.Alexandrium_singlet).toFixed(2))} c/mL`}</p>
-                        <p className="desc">{`Dinophysis: ${((payload[0].payload.Dinophysis).toFixed(2))} c/mL`}</p>
-                        <p className="desc">{`Cochlodinium: ${((payload[0].payload.Cochlodinium).toFixed(2))} c/mL`}</p>
-                        <p className="desc">{`Lingulodinium: ${((payload[0].payload.Lingulodinium).toFixed(2))} c/mL`}</p>
-                        <p className="desc">{`Prorocentrum: ${((payload[0].payload.Prorocentrum).toFixed(2))} c/mL`}</p>
-                        <p className="desc">{`Pseudo Nitzschia: ${((payload[0].payload.Pseudo_nitzschia).toFixed(2))} c/mL`}</p>
-                        <p className="desc">{`Pennate: ${((payload[0].payload.Pennate).toFixed(2))} c/mL`}</p>
+                        {this.props.habList.map(hab => this.renderTooltipDesc(hab, payload))}
                         <p className="desc biomass-desc">{`Total Biomass: ${((payload[0].payload.Total).toFixed(2))} c/mL`}</p>
                     </div>
                     }
@@ -231,23 +216,15 @@ class TimePlot extends React.Component {
                             iconType="rect" 
                             onClick={(label) => this.filterFor(label.dataKey)}>
                         </Legend>
-                        <Line type="monotone" className="line" dot={false} id="Akashiwo" dataKey="Akashiwo" isAnimationActive={false} stroke={this.state.colors.Akashiwo} strokeWidth={1.7} />
-                        <Line type="monotone" className="line" dot={false} id="Alexandrium_singlet" dataKey="Alexandrium_singlet" name="Alexandrium" isAnimationActive={false} stroke={this.state.colors.Alexandrium} strokeWidth={1.7}/>
-                        <Line type="monotone" className="line" dot={false} id="Ceratium" dataKey="Ceratium" isAnimationActive={false} stroke={this.state.colors.Ceratium} strokeWidth={1.7}/>
-                        <Line type="monotone" className="line" dot={false} id="Dinophysis" dataKey="Dinophysis" isAnimationActive={false} stroke={this.state.colors.Dinophysis} strokeWidth={1.7}/>
-                        <Line type="monotone" className="line" dot={false} id="Cochlodinium" dataKey="Cochlodinium" isAnimationActive={false} stroke={this.state.colors.Cochlodinium} strokeWidth={1.7}/>
-                        <Line type="monotone" className="line" dot={false} id="Lingulodinium" dataKey="Lingulodinium" isAnimationActive={false} stroke={this.state.colors.Lingulodinium} strokeWidth={1.7}/>
-                        <Line type="monotone" className="line" dot={false} id="Prorocentrum" dataKey="Prorocentrum" isAnimationActive={false} stroke={this.state.colors.Prorocentrum} strokeWidth={1.7}/>
-                        <Line type="monotone" className="line" dot={false} id="Pseudo_nitzschia" dataKey="Pseudo_nitzschia" isAnimationActive={false} stroke={this.state.colors.Pseudo_nitzschia} strokeWidth={1.7}/>
-                        <Line type="monotone" className="line" dot={false} id="Pennate" dataKey="Pennate" isAnimationActive={false} stroke={this.state.colors.Pennate} strokeWidth={1.7}/>
+                        {this.props.habList.map((hab, i) => this.renderLine(hab, i))}
                         {
                             (this.state.showTotal && !this.props.hideTotal) ?
-                            <Line type="monotone" className="line" dot={false} id="Total" dataKey="Total" name="Total" isAnimationActive={false} stroke={this.state.colors.Total} strokeWidth={1.5}/> :
+                            <Line type="monotone" className="line" dot={false} id="Total" dataKey="Total" name="Total" isAnimationActive={false} stroke="#cfd2d4" strokeWidth={1.5}/> :
                             <div/>
                         }
                         {
                             this.state.showThreshold ?
-                            <Line type="monotone" className="line" id="Threshold" dataKey="Threshold" name="Warning Threshold" stroke={this.state.colors.Threshold} strokeWidth={1.7} dot={false}/> :
+                            <Line type="monotone" className="line" id="Threshold" dataKey="Threshold" name="Warning Threshold" stroke="#ba023c" strokeWidth={1.7} dot={false}/> :
                             <div/>
                         }
                     </LineChart> : <div/>}

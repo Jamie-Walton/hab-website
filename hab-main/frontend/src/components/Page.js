@@ -4,14 +4,13 @@ import TotalPlot from './TotalPlot';
 import TimePlot from './TimePlot';
 import DatePicker from "./DatePicker";
 
-import logo from "../assets/logo.png";
-import logoWhite from "../assets/logo-white.png";
-
 class Page extends React.Component {
   
     constructor(props) {
       super(props);
       this.state = {
+          habList: [],
+          thresholds: {},
           counts: [],
           days: [],
           ticks: [],
@@ -38,7 +37,7 @@ class Page extends React.Component {
     loadData(week) {
         try {
             axios
-                .get('/load/' + week +'/')
+                .get(`/load/${this.props.name}/` + week +'/')
                 .then((res) => {
                     const counts = res.data.counts;
                     const days = res.data.days;
@@ -69,7 +68,7 @@ class Page extends React.Component {
     componentDidMount() {
         this.loadData(this.state.week);
         axios
-            .get('/load/warnings/')
+            .get(`/load/warnings/${this.props.name}/`)
             .then(res => {
                 var resWarnings = res.data.warnings;
                 if (resWarnings.includes('Alexandrium_singlet')) {
@@ -80,6 +79,24 @@ class Page extends React.Component {
                     warningDate: res.data.date
                 });
             })
+
+        axios
+            .get(`/load/info/${this.props.name}/`)
+            .then(res => {
+                const habList = res.data.hab_list;
+                var thresholds = {};
+                for (let i = 0; i < habList.length; i++) {
+                    if (habList[i] in res.data.hab_thresholds) {
+                        thresholds[habList[i]] = res.data.hab_thresholds[habList[i]];
+                    } else {
+                        thresholds[habList[i]] = null;
+                    }
+                }
+                this.setState({
+                    habList: habList,
+                    thresholds: thresholds,
+                });
+            });
     }
 
     nav(week) {
@@ -89,7 +106,7 @@ class Page extends React.Component {
     loadDateRange(start, end) {
         try {
             axios
-                .get(`/load/${start.split('/').join('')}/${end.split('/').join('')}/`)
+                .get(`/load/${this.props.name}/${start.split('/').join('')}/${end.split('/').join('')}/`)
                 .then((res) => {
                     const counts = res.data.counts;
                     const days = res.data.days;
@@ -135,29 +152,18 @@ class Page extends React.Component {
     }
 
     render() {
-        const thresholds = {
-            "Akashiwo": null,
-            "Alexandrium_singlet": 0,
-            "Ceratium": null,
-            "Dinophysis": 0.5,
-            "Cochlodinium": null,
-            "Lingulodinium": null,
-            "Prorocentrum": null,
-            "Pseudo_nitzschia": 10,
-            "Pennate": 10,
-        };
 
         const average = array => array.reduce((a, b) => a + b) / array.length;
         
         if (this.state.counts.length > 0) {
             var averages = 
-                Object.keys(thresholds).map( 
+                Object.keys(this.state.thresholds).map( 
                     name => Object.fromEntries(
                         [
-                            ['name', name=='Alexandrium_singlet' ? 'Alexandrium' : name],
-                            ['none', (thresholds[name] !== null) ? 0 : average(this.state.counts.map(c => c[name]))],
-                            ['below', (thresholds[name] !== null) ? ( (average(this.state.counts.map(c => c[name])) < thresholds[name]) ? average(this.state.counts.map(c => c[name])) : 0 ) : 0],
-                            ['above', (thresholds[name] !== null) ? ( (average(this.state.counts.map(c => c[name])) > thresholds[name]) ? average(this.state.counts.map(c => c[name])) : 0 ) : 0],
+                            ['name', name=='Alexandrium_singlet' ? 'Alexandrium' : name], // TODO: Fix hardcode!
+                            ['none', (this.state.thresholds[name] !== null) ? 0 : average(this.state.counts.map(c => c[name]))],
+                            ['below', (this.state.thresholds[name] !== null) ? ( (average(this.state.counts.map(c => c[name])) < this.state.thresholds[name]) ? average(this.state.counts.map(c => c[name])) : 0 ) : 0],
+                            ['above', (this.state.thresholds[name] !== null) ? ( (average(this.state.counts.map(c => c[name])) > this.state.thresholds[name]) ? average(this.state.counts.map(c => c[name])) : 0 ) : 0],
                         ]
                         )
                     );
@@ -167,16 +173,6 @@ class Page extends React.Component {
 
         return(
             <div>
-                <div className="header">
-                    <img className="header-logo" src={logoWhite} alt="Kudela Lab logo"></img>
-                    <div>
-                        <h2 className="subheading">Kudela Lab</h2>
-                        <h1 className="main-heading">HAB Tracker</h1>
-                        <h3 className="description-heading">
-                        Keep track of harmful algae at the Santa Cruz Wharf in California.
-                        </h3>
-                    </div>
-                </div>
                 <div className="header-banner">
                     {this.state.warnings ? 
                     <div className="warning-banner">
@@ -202,10 +198,11 @@ class Page extends React.Component {
                     />
                 <div className="daily-plot">
                     {(this.state.counts) ?
-                    <TimePlot 
+                    <TimePlot
+                        habList={this.state.habList}
                         counts={this.state.counts}
                         days={this.state.days}
-                        thresholds={thresholds}
+                        thresholds={this.state.thresholds}
                         ticks={this.state.ticks}
                         key={this.state.timekey}
                         showIndividuals={this.state.showIndividuals}
@@ -229,19 +226,8 @@ class Page extends React.Component {
                     </div>
                     <div className="thresholds-container">
                         <p className="thresholds-header">Thresholds</p>
-                        {Object.keys(thresholds).map(key => this.renderThreshold(thresholds, key))}
+                        {Object.keys(this.state.thresholds).map(key => this.renderThreshold(this.state.thresholds, key))}
                     </div>
-                </div>
-                <div className='footer'>
-                    <div>
-                        <h2 className="subheading footer-heading">Kudela Lab</h2>
-                        <div className="footer-links">
-                            <a className="footer-link" target="_blank" href="http://akashiwo.oceandatacenter.ucsc.edu:8000/timeline?dataset=SCW">SCW IFCB Dashboard</a>
-                            <a className="footer-link" target="_blank" href="http://oceandatacenter.ucsc.edu/">Lab Website</a>
-                        </div>
-                        <p className='disclaimer'><b>Disclaimer:</b> We are providing these data as a service to interested parties. Our goal is to deliver a near-real time summary of potentially harmful algal species in the water.  Cell identification data are from an automated classifier.  The IDs and concentrations are not necessarily manually confirmed and there may be errors.</p>
-                    </div>
-                    <img className="footer-logo" src={logo} alt="Kudela Lab logo"></img>
                 </div>
             </div>
         );
