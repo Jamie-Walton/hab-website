@@ -18,16 +18,17 @@ def make_labs():
         }
     )
 
-    boulder = Lab(
-        name = "boulder", 
-        data_path = "boulder", 
+    humboldt = Lab(
+        name = "humboldt", 
+        data_path = "humboldt", 
         hab_list = [
             'Akashiwo', 'Alexandrium_singlet', 'Ceratium', 'Cochlodinium', \
-            'Dinophysis', 'Pennate', 'Prorocentrum',
+            'Dinophysis', 'Lingulodinium', 'Pennate', 'Prorocentrum', 'Pseudo-nitzschia'
         ], 
         hab_thresholds = {
             "Alexandrium_singlet": 0,
             "Dinophysis": 0.5,
+            "Pseudo-nitzschia": 10,
             "Pennate": 10,
         }
     )
@@ -35,6 +36,6 @@ def make_labs():
     return({
 
         "kudela" : kudela,
-        "boulder" : boulder
+        "humboldt" : humboldt
         
     })

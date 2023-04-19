@@ -20,7 +20,7 @@ class HumboldtLab extends React.Component {
                         </h3>
                     </div>
                 </div>
-                {<Page name="boulder"/>}
+                {<Page name="humboldt"/>}
                 <div className='footer'>
                     <div>
                         <h2 className="subheading footer-heading">Humboldt Lab</h2>

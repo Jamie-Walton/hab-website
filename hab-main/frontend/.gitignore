@@ -23,3 +23,7 @@ yarn-error.log*
 
 # summary files
 /hab-main/summary
+
+# local settings
+/hab-main/backend/settings.py
+/hab-main/frontend/package.json
