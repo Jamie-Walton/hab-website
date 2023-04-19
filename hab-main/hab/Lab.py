@@ -1,4 +1,4 @@
-from distutils.log import warn
+from sre_compile import isstring
 import scipy.io
 import datetime as dt
 import os
@@ -13,6 +13,10 @@ class Lab:
         self.hab_list = hab_list
         self.display_list = [name.replace("-", "_") for name in hab_list]
         self.hab_thresholds = hab_thresholds
+        self.dates = []
+        self.classes = []
+        self.classcount = []
+        self.mL = []
 
 
     def matlab2datetime(self, matlab_datenum):
@@ -21,7 +25,20 @@ class Lab:
         day = dt.datetime.fromordinal(int(matlab_datenum))
         dayfrac = dt.timedelta(days=matlab_datenum%1) - dt.timedelta(days = 366)
         return day + dayfrac
+
+    def convertFromHumboldt(self, mat):
+        dates, classes, mL = mat['mdateTB'], mat['class2useTB'], mat['ml_analyzedTB']
+
+        new_dates = np.array([[item] for item in dates[0]])
+        new_classes = [item.strip() for item in classes]
+        new_mL = [[item] for item in mL[0]]
+
+        return [new_dates, new_classes, new_mL]
     
+    def convertFromKudela(self, mat):
+        classes = mat['class2useTB']
+        new_classes = [item[0][0] for item in classes]
+        return new_classes
 
     def load_data(self, start_date=None, week=None):
         '''
@@ -33,30 +50,38 @@ class Lab:
         files = [f for f in os.listdir(f'summary/{self.data_path}') if 'summary_all' in f]
         mat = scipy.io.loadmat(f'summary/{self.data_path}/{max(files)}')
         files = [f for f in files if f != max(files)]
-        dates = mat['mdateTB']
+        self.dates = mat['mdateTB']
+        self.classes = mat['class2useTB']
+        self.mL = mat['ml_analyzedTB']
         
 
         if not start_date:
             if not week:
                 raise Exception("Must provide either a start date or a week number")
             else:
-                start_date = int(dates[len(dates)-1,0])-(7*week)
+                start_date = int(self.dates[len(self.dates)-1,0])-(7*week)
 
-        while (self.matlab2datetime(start_date).year != self.matlab2datetime(int(dates[0,0])).year) and files:
+        if (self.name == 'humboldt'):
+            [self.dates, self.classes, self.mL] = self.convertFromHumboldt(mat)
+        elif (self.name == 'kudela'):
+            self.classes = self.convertFromKudela(mat)
+        
+        while (self.matlab2datetime(start_date).year != self.matlab2datetime(int(self.dates[0,0])).year) and files:
             mat = scipy.io.loadmat(f'summary/{self.data_path}/{max(files)}')
             files = [f for f in files if f != max(files)]
-            dates = mat['mdateTB']
+            self.dates = mat['mdateTB']
+            self.classes = mat['class2useTB']
+            self.mL = mat['ml_analyzedTB']
+            if (self.name == 'Humboldt'):
+                [self.dates, self.classes, self.mL] = self.convertFromHumboldt(mat)
         
-        classes = mat['class2useTB']
-        indices = [i for i in range(len(classes)) if classes[i][0][0] in self.hab_list]
+        indices = [i for i in range(len(self.classes)) if self.classes[i] in self.hab_list]
+        self.classcount = mat['classcountTB'][:, indices] / self.mL
 
-        mL = mat['ml_analyzedTB']
-        classcount = mat['classcountTB'][:, indices] / mL
-
-        return (start_date, dates, classcount)
+        return (start_date, self.classcount)
 
 
-    def wrap_data(self, start_date, end_date, dates, classcount, hab_list):
+    def wrap_data(self, start_date, end_date, classcount, hab_list):
         ''''Parse data for frontend-deliverable time series usage'''
 
         weekcounts = []
@@ -71,9 +96,9 @@ class Lab:
             day = days[daynum]
             day_strings += [self.matlab2datetime(day).strftime('%m/%d/%Y')]
             if (day_strings[0][6:10] != day_strings[len(day_strings)-1][6:10]) and not new_start:
-                [new_start, dates, classcount] = self.load_data(start_date=day)
-            same_day_indices = np.where(np.floor(dates)==day)[0]
-            timestamps = dates[same_day_indices, :]
+                [new_start, classcount] = self.load_data(start_date=day)
+            same_day_indices = np.where(np.floor(self.dates)==day)[0]
+            timestamps = self.dates[same_day_indices, :]
             day_count = classcount[same_day_indices, :]
 
             for f in range(len(day_count)):
@@ -102,12 +127,9 @@ class Lab:
 
         files = [f for f in os.listdir(f'summary/{self.data_path}') if 'summary_all' in f]
         mat = scipy.io.loadmat(f'summary/{self.data_path}/{max(files)}')
-        dates = mat['mdateTB']
-        classes = mat['class2useTB']
-        indices = [i for i in range(len(classes)) if classes[i][0][0] in self.hab_thresholds.keys()]
-        mL = mat['ml_analyzedTB']
-        classcount = mat['classcountTB'][:, indices] / mL
-        data = self.wrap_data(int(dates[len(dates)-1,0]), int(dates[len(dates)-1,0]), dates, classcount, self.hab_thresholds.keys())
+        indices = [i for i in range(len(self.classes)) if self.classes[i][0][0] in self.hab_thresholds.keys()]
+        classcount = mat['classcountTB'][:, indices] / self.mL
+        data = self.wrap_data(int(self.dates[len(self.dates)-1,0]), int(self.dates[len(self.dates)-1,0]), classcount, self.hab_thresholds.keys())
 
         warnings = []
         for name,threshold in self.hab_thresholds.items():
@@ -117,7 +139,7 @@ class Lab:
 
         warningPackage = {
             'warnings': warnings,
-            'date': self.matlab2datetime(int(dates[len(dates)-1,0])).strftime("%m/%d/%y"),
+            'date': self.matlab2datetime(int(self.dates[len(self.dates)-1,0])).strftime("%m/%d/%y"),
         }
 
         return warningPackage

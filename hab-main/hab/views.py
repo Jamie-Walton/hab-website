@@ -16,8 +16,8 @@ def load_by_week(request, lab_name, week):
     lab_directory = make_labs()
     lab = lab_directory[lab_name]
 
-    [start_date, dates, classcount] = lab.load_data(week=week)
-    data = lab.wrap_data(start_date, start_date+7, dates, classcount, lab.display_list)
+    [start_date, classcount] = lab.load_data(week=week)
+    data = lab.wrap_data(start_date, start_date+7, classcount, lab.display_list)
 
     return JsonResponse(data)
 
@@ -33,8 +33,8 @@ def load_by_range(request, lab_name, start_date, end_date):
 
     ord_start = dt.datetime.toordinal(dt.datetime.strptime(start_date, '%m%d%Y'))+366
     ord_end = dt.datetime.toordinal(dt.datetime.strptime(end_date, '%m%d%Y'))+366
-    [ord_start, dates, classcount] = lab.load_data(start_date=ord_start)
-    data = lab.wrap_data(ord_start, ord_end, dates, classcount, lab.display_list)
+    [ord_start, classcount] = lab.load_data(start_date=ord_start)
+    data = lab.wrap_data(ord_start, ord_end, classcount, lab.display_list)
     
     return JsonResponse(data)
 
