@@ -1,4 +1,3 @@
-from sre_compile import isstring
 import scipy.io
 import datetime as dt
 import os
@@ -47,13 +46,12 @@ class Lab:
             WEEK (optional) = The week number for the date range (where 1 is the most recent)
         '''
 
-        files = [f for f in os.listdir(f'summary/{self.data_path}') if 'summary_all' in f]
+        files = [f for f in os.listdir(f'summary/{self.data_path}') if 'summary' in f]
         mat = scipy.io.loadmat(f'summary/{self.data_path}/{max(files)}')
         files = [f for f in files if f != max(files)]
         self.dates = mat['mdateTB']
         self.classes = mat['class2useTB']
         self.mL = mat['ml_analyzedTB']
-        
 
         if not start_date:
             if not week:
@@ -104,16 +102,15 @@ class Lab:
             for f in range(len(day_count)):
                 file = day_count[f]
                 final_counts = np.ndarray.tolist(file)
-
                 entry = {name:float(count) for name, count in zip(hab_list, final_counts)}
                 time = self.matlab2datetime(timestamps[f][0]).strftime("%H:%M:%S").split(':')
+
                 seconds = 86400*daynum + 3600*int(time[0]) + 60*int(time[1]) + int(time[2])
                 entry['name'] = seconds
                 entry['timestamp'] = self.matlab2datetime(timestamps[f][0]).strftime("%m/%d/%Y, %H:%M:%S")
                 entry['Total'] = sum(final_counts)
                 weekcounts += [entry]
                 seconds_ticks += [86400*daynum]
-
         data = {'counts': weekcounts,
                 'empties': empties,
                 'days': day_strings,
@@ -125,13 +122,28 @@ class Lab:
     def load_warnings(self):
         '''Load most recent warnings'''
 
-        files = [f for f in os.listdir(f'summary/{self.data_path}') if 'summary_all' in f]
+        files = [f for f in os.listdir(f'summary/{self.data_path}') if 'summary' in f]
         mat = scipy.io.loadmat(f'summary/{self.data_path}/{max(files)}')
-        indices = [i for i in range(len(self.classes)) if self.classes[i][0][0] in self.hab_thresholds.keys()]
+
+        files = [f for f in os.listdir(f'summary/{self.data_path}') if 'summary' in f]
+        mat = scipy.io.loadmat(f'summary/{self.data_path}/{max(files)}')
+        files = [f for f in files if f != max(files)]
+        self.dates = mat['mdateTB']
+        self.classes = mat['class2useTB']
+        self.mL = mat['ml_analyzedTB']
+
+        if (self.name == 'humboldt'):
+            [self.dates, self.classes, self.mL] = self.convertFromHumboldt(mat)
+        elif (self.name == 'kudela'):
+            self.classes = self.convertFromKudela(mat)
+
+        indices = [i for i in range(len(self.classes)) if self.classes[i] in self.hab_thresholds.keys()]
         classcount = mat['classcountTB'][:, indices] / self.mL
+
         data = self.wrap_data(int(self.dates[len(self.dates)-1,0]), int(self.dates[len(self.dates)-1,0]), classcount, self.hab_thresholds.keys())
 
         warnings = []
+
         for name,threshold in self.hab_thresholds.items():
             counts = [d[name] for d in data['counts'] if d[name] > threshold]
             if counts:

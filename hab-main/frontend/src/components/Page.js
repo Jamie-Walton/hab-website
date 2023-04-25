@@ -41,7 +41,13 @@ class Page extends React.Component {
                 .then((res) => {
                     const counts = res.data.counts;
                     const days = res.data.days;
-                    const ticks = res.data.seconds_ticks;
+                    var ticks = res.data.seconds_ticks;
+                    if (ticks.length < 2) {
+                        ticks = [];
+                        for (let day = 0; day < days.length; day++) {
+                            ticks.push(day * 86400);
+                        }
+                    }
                     if (res.data.empties) {
                         for (let i = 0; i < counts.length; i++) {
                             Object.keys(counts[i]).forEach((key, index) => {

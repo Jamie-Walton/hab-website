@@ -23,7 +23,8 @@ def make_labs():
         data_path = "humboldt", 
         hab_list = [
             'Akashiwo', 'Alexandrium_singlet', 'Ceratium', 'Cochlodinium', \
-            'Dinophysis', 'Lingulodinium', 'Pennate', 'Prorocentrum', 'Pseudo-nitzschia'
+            'Dinophysis', 'Lingulodinium', 'Pennate', 'Prorocentrum', \
+            'Pseudo-nitzschia'
         ], 
         hab_thresholds = {
             "Alexandrium_singlet": 0,
