@@ -101,7 +101,7 @@ class TimePlot extends React.Component {
                     <desc></desc>
                     <path stroke="none" fill={this.state.colors[name]} d="M0,4h32v24h-32z" className="recharts-legend-icon"></path>
                 </svg>
-                <text x="20" y={y}>{name}</text>
+                <text x="20" y={y}>{name.replace("_", " ")}</text>
             </svg>
         )
       }
@@ -115,8 +115,12 @@ class TimePlot extends React.Component {
       }
 
       renderTooltipDesc(name, payload) {
+        var displayName = name;
+        if (name === "Alexandrium_singlet") {
+            displayName = "Alexandrium";
+        }
         return (
-            <p className="desc">{`${name}: ${((payload[0].payload[name]).toFixed(2))} c/mL`}</p>
+            <p className="desc">{`${displayName.replace("_", "-")}: ${((payload[0].payload[name]).toFixed(2))} c/mL`}</p>
         );
       }
 
@@ -134,7 +138,7 @@ class TimePlot extends React.Component {
                 <div className="custom-tooltip">
                     <p className="label">{`${payload[0].payload.timestamp} GMT`}</p>
                     {this.state.filtered ?
-                    <p className="desc">{`${this.state.filtered}: ${((payload[0].payload[this.state.filtered]).toFixed(2))} c/mL`}</p> :
+                    <p className="desc">{`${this.state.filtered.replace("_", "-")}: ${((payload[0].payload[this.state.filtered]).toFixed(2))} c/mL`}</p> :
                     <div>
                         {this.props.habList.map(hab => this.renderTooltipDesc(hab, payload))}
                         <p className="desc biomass-desc">{`Total Biomass: ${((payload[0].payload.Total).toFixed(2))} c/mL`}</p>
@@ -150,7 +154,6 @@ class TimePlot extends React.Component {
             if (this.state.filtered) {
                 payload = payload.filter(c => c.payload.id === this.state.filtered || c.payload.id === 'Threshold');
             }
-            
           
             return (
             <div>
@@ -164,7 +167,7 @@ class TimePlot extends React.Component {
                                 <desc></desc>
                                 <path stroke="none" fill={entry.color} d="M0,4h32v24h-32z" className="recharts-legend-icon"></path>
                             </svg>
-                            {entry.value}
+                            {entry.value === "Alexandrium_singlet" ? "Alexandrium" : entry.value.replace("_", "-")}
                         </li>
                     ))
                     }

@@ -29,7 +29,7 @@ class TotalPlot extends React.Component {
             const desc = Math.max(payload[0].payload.none, payload[0].payload.below, payload[0].payload.above).toFixed(2)
             return (
             <div className="custom-tooltip">
-                <p className="label">{`${label}`}</p>
+                <p className="label">{`${label === "Alexandrium_singlet" ? "Alexandrium" : label.replace("_", "-")}`}</p>
                 <p className="desc">{`${desc} c/mL`}</p>
             </div>
             );
@@ -43,7 +43,12 @@ class TotalPlot extends React.Component {
                     <BarChart width={700} height={300} data={this.props.averages}>
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis 
-                            dataKey="name" angle={-25} textAnchor="end" height={60} allowDataOverFlow={true} minTickGap={-40}>
+                            dataKey="name" 
+                            angle={-25} 
+                            textAnchor="end" 
+                            height={60} 
+                            allowDataOverFlow={true} 
+                            minTickGap={-40}>
                             <Label value="HAB Species" offset={-40} position="insideBottom" />
                         </XAxis>
                         <YAxis label={{ value: 'Average Cell Count (c/mL)', angle: -90, position: 'insideBottomLeft' }} />

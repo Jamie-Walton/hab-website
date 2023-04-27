@@ -27,7 +27,7 @@ class ClassPlot extends React.Component {
 
         return (
             <div>
-                <h5>{this.props.name}</h5>
+                <h5>{this.props.name === "Alexandrium_singlet" ? "Alexandrium" : this.props.name.replace("_", "-")}</h5>
                 <div id="plot">
                     <LineChart width={275} height={150} data={this.props.data} key={this.props.key} ref={(chart) => this.currentChart = chart}>
                         <CartesianGrid strokeDasharray="3 3" />
