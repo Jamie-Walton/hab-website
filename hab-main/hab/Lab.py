@@ -151,7 +151,7 @@ class Lab:
 
         warningPackage = {
             'warnings': warnings,
-            'date': self.matlab2datetime(int(self.dates[len(self.dates)-1,0])).strftime("%m/%d/%y"),
+            'date': self.matlab2datetime(int(self.dates[len(self.dates)-1,0])).strftime("%m/%d/%Y"),
         }
 
         return warningPackage

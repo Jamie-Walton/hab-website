@@ -27,9 +27,12 @@ class Page extends React.Component {
 
     calculateDate(seconds) {
         if (this.state.days.length > 0) {
-            const datenum = Date.parse(this.state.days[0]) + seconds;
-            const date = new Date((datenum));
-            return date.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
+            var datenum = Date.parse(this.state.days[0]) + (seconds*1000);
+            var date = new Date(datenum);
+            datenum = datenum + (date.getTimezoneOffset() * 60 * 1000)
+            date = new Date(datenum);
+            const timezone = date.toString().slice(34, date.toString().length)
+            return `${date.toLocaleString()} ${timezone}`;
         }
         
     }
@@ -183,14 +186,14 @@ class Page extends React.Component {
                     {this.state.warnings ? 
                     <div className="warning-banner">
                         <p className="warning-species">{this.state.warnings.join(', ')}</p>
-                        <p className="warnings">{`exceeded warning thresholds on ${this.state.warningDate}`}</p>
+                        <p className="warnings">{`exceeded warning thresholds on ${this.state.warningDate} GMT`}</p>
                     </div> :
                     <div className="warning-banner">
-                        <p className="no-warnings">{`No HAB species exceeded warning thresholds as of ${this.state.warningDate}`}</p>
+                        <p className="no-warnings">{`No HAB species exceeded warning thresholds as of ${this.state.warningDate} GMT`}</p>
                     </div>
                     }
                     <div className="last-reported-data">
-                        <p>{`Last reported data: ${this.calculateDate(this.state.ticks[this.state.ticks.length - 1])} PST`}</p>
+                        <p>{`Last reported data: ${this.calculateDate(this.state.counts.map(c => c.name)[this.state.counts.map(c => c.name).length - 1])}`}</p>
                     </div>
                 </div>
                 <div className="page">
