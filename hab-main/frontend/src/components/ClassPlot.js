@@ -41,7 +41,7 @@ class ClassPlot extends React.Component {
                             hide={true}
                             domain={[0,604800]}>
                         </XAxis>
-                        <YAxis key={this.props.key} label={{ value: 'Cell Count (c/mL)', angle: -90, position: 'center' }} />
+                        <YAxis key={this.props.key} label={{ value: 'Cell Count (c/L)', angle: -90, position: 'center' }} />
                         <Line type="monotone" className="line" dot={false} id={this.props.name} dataKey={this.props.name} isAnimationActive={false} stroke={this.state.colors[this.props.name]} strokeWidth={1} />
                         <Line type="monotone" className="line" dot={false} id="Threshold" dataKey="Threshold" stroke={this.state.colors.Threshold} strokeWidth={2} dot={false}/>
                     </LineChart>

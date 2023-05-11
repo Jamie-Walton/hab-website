@@ -155,7 +155,7 @@ class Page extends React.Component {
     renderThreshold(thresholds, key) {
         if (thresholds[key] !== null) {
             return(
-                <p className="threshold">{`${key==="Alexandrium_singlet" ? "Alexandrium" : key.replace("_", "-")}: ${thresholds[key]} c/mL`}</p>
+                <p className="threshold">{`${key==="Alexandrium_singlet" ? "Alexandrium" : key.replace("_", "-")}: ${thresholds[key]} c/L`}</p>
             );
         }
     }

@@ -12,9 +12,9 @@ def make_labs():
         ], 
         hab_thresholds = {
             "Alexandrium_singlet": 0,
-            "Dinophysis": 0.5,
-            "Pseudo-nitzschia": 10,
-            "Pennate": 10,
+            "Dinophysis": 500,
+            "Pseudo-nitzschia": 10000,
+            "Pennate": 10000,
         }
     )
 
@@ -28,9 +28,9 @@ def make_labs():
         ], 
         hab_thresholds = {
             "Alexandrium_singlet": 0,
-            "Dinophysis": 0.5,
-            "Pseudo-nitzschia": 10,
-            "Pennate": 10,
+            "Dinophysis": 500,
+            "Pseudo-nitzschia": 10000,
+            "Pennate": 10000,
         }
     )
 

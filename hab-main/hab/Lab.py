@@ -65,9 +65,6 @@ class Lab:
                 raise Exception("Must provide either a start date or a week number")
             else:
                 start_date = int(self.dates[len(self.dates)-1,0])-(7*week)
-                print('================')
-                print(self.matlab2datetime(start_date + 7))
-                print('================')
         
         while (self.matlab2datetime(start_date).year != self.matlab2datetime(int(self.dates[0,0])).year) and files:
             mat = scipy.io.loadmat(f'summary/{self.data_path}/{max(files)}')
@@ -79,7 +76,7 @@ class Lab:
                 [self.dates, self.classes, self.mL] = self.convertFromHumboldt(mat)
         
         indices = [i for i in range(len(self.classes)) if self.classes[i] in self.hab_list]
-        self.classcount = mat['classcountTB'][:, indices] / self.mL
+        self.classcount = (mat['classcountTB'][:, indices] / self.mL) * 1000
 
         return (start_date, self.classcount)
 
@@ -143,7 +140,7 @@ class Lab:
             self.classes = self.convertFromKudela(mat)
 
         indices = [i for i in range(len(self.classes)) if self.classes[i] in self.hab_thresholds.keys()]
-        classcount = mat['classcountTB'][:, indices] / self.mL
+        classcount = (mat['classcountTB'][:, indices] / self.mL) * 1000
 
         data = self.wrap_data(int(self.dates[len(self.dates)-1,0]), int(self.dates[len(self.dates)-1,0]), classcount, self.hab_thresholds.keys())
 

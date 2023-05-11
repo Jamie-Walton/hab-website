@@ -51,7 +51,7 @@ class TotalPlot extends React.Component {
                             minTickGap={-40}>
                             <Label value="HAB Species" offset={-40} position="insideBottom" />
                         </XAxis>
-                        <YAxis label={{ value: 'Average Cell Count (c/mL)', angle: -90, position: 'insideBottomLeft' }} />
+                        <YAxis label={{ value: 'Average Cell Count (c/L)', angle: -90, position: 'insideBottomLeft' }} />
                         <Tooltip 
                             content={<CustomTooltip />} 
                             itemStyle={{backgroundColor:'#FFFFFF', color:'#777777'}} 

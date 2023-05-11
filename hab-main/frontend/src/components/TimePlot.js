@@ -120,7 +120,7 @@ class TimePlot extends React.Component {
             displayName = "Alexandrium";
         }
         return (
-            <p className="desc">{`${displayName.replace("_", "-")}: ${((payload[0].payload[name]).toFixed(2))} c/mL`}</p>
+            <p className="desc">{`${displayName.replace("_", "-")}: ${((payload[0].payload[name]).toFixed(2))} c/L`}</p>
         );
       }
 
@@ -138,10 +138,10 @@ class TimePlot extends React.Component {
                 <div className="custom-tooltip">
                     <p className="label">{`${payload[0].payload.timestamp} GMT`}</p>
                     {this.state.filtered ?
-                    <p className="desc">{`${this.state.filtered.replace("_", "-")}: ${((payload[0].payload[this.state.filtered]).toFixed(2))} c/mL`}</p> :
+                    <p className="desc">{`${this.state.filtered.replace("_", "-")}: ${((payload[0].payload[this.state.filtered]).toFixed(2))} c/L`}</p> :
                     <div>
                         {this.props.habList.map(hab => this.renderTooltipDesc(hab, payload))}
-                        <p className="desc biomass-desc">{`Total Biomass: ${((payload[0].payload.Total).toFixed(2))} c/mL`}</p>
+                        <p className="desc biomass-desc">{`Total Biomass: ${((payload[0].payload.Total).toFixed(2))} c/L`}</p>
                     </div>
                     }
                 </div>
@@ -200,7 +200,7 @@ class TimePlot extends React.Component {
                             hide={false}
                             domain={[0,604800]}>
                         </XAxis>
-                        <YAxis key={this.props.key} label={{ value: 'Cell Count (c/mL)', angle: -90, position: 'insideLeft' }} />
+                        <YAxis key={this.props.key} label={{ value: 'Cell Count (c/L)', angle: -90, position: 'insideLeft' }} />
                         <Tooltip 
                             content={<CustomTooltip />} 
                             itemStyle={{backgroundColor:'#FFFFFF', color:'#777777'}} 
