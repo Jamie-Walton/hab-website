@@ -184,68 +184,73 @@ class TimePlot extends React.Component {
                     <div className="download-button" onClick={() => this.downloadImage()}>Download</div>
                     <div className="download-button" style={{marginTop: '0'}} onClick={() => this.props.toggleIndividuals()}>{this.props.showIndividuals ? 'Hide All' : 'Show All'}</div>
                 </div>
-                <div id="plot">
-                    {(this.state.data) ?
-                    <LineChart width={700} height={350} data={this.state.data} key={this.props.key} ref={(chart) => this.currentChart = chart}>
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis 
-                            key={this.props.key} 
-                            dataKey="name"
-                            height={50}
-                            type="number"
-                            tick={<CustomizedAxisTick days={this.props.days} ticks={this.props.ticks}/>}
-                            ticks={this.props.ticks}
-                            tickCount={100}
-                            interval={0}
-                            hide={false}
-                            domain={[0,604800]}>
-                        </XAxis>
-                        <YAxis key={this.props.key} label={{ value: 'Cell Count (c/L)', angle: -90, position: 'insideLeft' }} />
-                        <Tooltip 
-                            content={<CustomTooltip />} 
-                            itemStyle={{backgroundColor:'#FFFFFF', color:'#777777'}} 
-                            wrapperStyle={{backgroundColor:'#FFFFFF', color: '#777777', padding:15,
-                                borderRadius:15
-                            }}
-                            position={{ x: 750, y: 18 }}
-                            cursor={{ fill: 'rgba(206, 206, 206, 0.3)' }}
+                <div className="time-plot-container" id="plot">
+                    <div className='cell-axis axis-name-container'>
+                        <p className='axis-name'>Cell Count (c/L)</p>
+                    </div>
+                    <div>
+                        {(this.state.data) ?
+                        <LineChart width={700} height={350} data={this.state.data} key={this.props.key} ref={(chart) => this.currentChart = chart}>
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis 
+                                key={this.props.key} 
+                                dataKey="name"
+                                height={50}
+                                type="number"
+                                tick={<CustomizedAxisTick days={this.props.days} ticks={this.props.ticks}/>}
+                                ticks={this.props.ticks}
+                                tickCount={100}
+                                interval={0}
+                                hide={false}
+                                domain={[0,604800]}>
+                            </XAxis>
+                            <YAxis key={this.props.key}/>
+                            <Tooltip 
+                                content={<CustomTooltip />} 
+                                itemStyle={{backgroundColor:'#FFFFFF', color:'#777777'}} 
+                                wrapperStyle={{backgroundColor:'#FFFFFF', color: '#777777', padding:15,
+                                    borderRadius:15
+                                }}
+                                position={{ x: 750, y: 18 }}
+                                cursor={{ fill: 'rgba(206, 206, 206, 0.3)' }}
+                                    />
+                            <Legend 
+                                content={renderLegend}
+                                layout="vertical" 
+                                verticalAlign="top" 
+                                align="right" 
+                                wrapperStyle={{margin:'0 -20px', cursor: 'pointer'}} 
+                                iconType="rect" 
+                                onClick={(label) => this.filterFor(label.dataKey)}>
+                            </Legend>
+                            {this.props.habList.map((hab, i) => this.renderLine(hab, i))}
+                            {
+                                (this.state.showTotal && !this.props.hideTotal) ?
+                                <Line type="monotone" className="line" dot={false} id="Total" dataKey="Total" name="Total" isAnimationActive={false} stroke="#cfd2d4" strokeWidth={1.5}/> :
+                                <div/>
+                            }
+                            {
+                                this.state.showThreshold ?
+                                <Line type="monotone" className="line" id="Threshold" dataKey="Threshold" name="Warning Threshold" stroke="#ba023c" strokeWidth={1.7} dot={false}/> :
+                                <div/>
+                            }
+                        </LineChart> : <div/>}
+                        <div className='day-axis axis-name-container'>
+                            <p className='axis-name'>Date (GMT)</p>
+                        </div>
+                    </div>
+                    {this.props.showIndividuals ? 
+                        <div style={{display:'flex', flexWrap:'wrap', marginTop: '30px'}}>
+                            {Object.keys(this.props.thresholds).map(c => 
+                                <ClassPlot 
+                                    name={c}
+                                    days={this.props.days}
+                                    data={this.props.counts.map(data => Object.fromEntries([[c, data[c]], ["name",data['name']], ["Threshold", this.props.thresholds[c]]]))}
                                 />
-                        <Legend 
-                            content={renderLegend}
-                            layout="vertical" 
-                            verticalAlign="top" 
-                            align="right" 
-                            wrapperStyle={{margin:'0 -20px', cursor: 'pointer'}} 
-                            iconType="rect" 
-                            onClick={(label) => this.filterFor(label.dataKey)}>
-                        </Legend>
-                        {this.props.habList.map((hab, i) => this.renderLine(hab, i))}
-                        {
-                            (this.state.showTotal && !this.props.hideTotal) ?
-                            <Line type="monotone" className="line" dot={false} id="Total" dataKey="Total" name="Total" isAnimationActive={false} stroke="#cfd2d4" strokeWidth={1.5}/> :
-                            <div/>
-                        }
-                        {
-                            this.state.showThreshold ?
-                            <Line type="monotone" className="line" id="Threshold" dataKey="Threshold" name="Warning Threshold" stroke="#ba023c" strokeWidth={1.7} dot={false}/> :
-                            <div/>
-                        }
-                    </LineChart> : <div/>}
-                    <div className='day-axis axis-name-container'>
-                        <p className='axis-name'>Date (GMT)</p>
-                    </div>
+                            )}
+                        </div>
+                        : <div/>}
                 </div>
-                {this.props.showIndividuals ? 
-                    <div style={{display:'flex', flexWrap:'wrap', marginTop: '30px'}}>
-                        {Object.keys(this.props.thresholds).map(c => 
-                            <ClassPlot 
-                                name={c}
-                                days={this.props.days}
-                                data={this.props.counts.map(data => Object.fromEntries([[c, data[c]], ["name",data['name']], ["Threshold", this.props.thresholds[c]]]))}
-                            />
-                        )}
-                    </div>
-                    : <div/>}
             </div>
         );
     }
