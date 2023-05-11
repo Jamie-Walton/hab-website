@@ -47,22 +47,27 @@ class Lab:
         '''
 
         files = [f for f in os.listdir(f'summary/{self.data_path}') if 'summary' in f]
+
         mat = scipy.io.loadmat(f'summary/{self.data_path}/{max(files)}')
         files = [f for f in files if f != max(files)]
         self.dates = mat['mdateTB']
+        
         self.classes = mat['class2useTB']
         self.mL = mat['ml_analyzedTB']
+
+        if (self.name == 'humboldt'):
+            [self.dates, self.classes, self.mL] = self.convertFromHumboldt(mat)
+        elif (self.name == 'kudela'):
+            self.classes = self.convertFromKudela(mat)
 
         if not start_date:
             if not week:
                 raise Exception("Must provide either a start date or a week number")
             else:
                 start_date = int(self.dates[len(self.dates)-1,0])-(7*week)
-
-        if (self.name == 'humboldt'):
-            [self.dates, self.classes, self.mL] = self.convertFromHumboldt(mat)
-        elif (self.name == 'kudela'):
-            self.classes = self.convertFromKudela(mat)
+                print('================')
+                print(self.matlab2datetime(start_date + 7))
+                print('================')
         
         while (self.matlab2datetime(start_date).year != self.matlab2datetime(int(self.dates[0,0])).year) and files:
             mat = scipy.io.loadmat(f'summary/{self.data_path}/{max(files)}')
