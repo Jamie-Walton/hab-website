@@ -25,6 +25,15 @@ class Lab:
         dayfrac = dt.timedelta(days=matlab_datenum%1) - dt.timedelta(days = 366)
         return day + dayfrac
 
+
+    def datetime2matlab(self, datetime):
+        """Convert MATLAB datenum to a datetime"""
+
+        delta = (datetime - dt.datetime(1, 1, 1))
+        datenum = delta.total_seconds() / (24 * 60 * 60) + 367
+        return datenum
+
+
     def convertFromHumboldt(self, mat):
         dates, classes, mL = mat['mdateTB'], mat['class2useTB'], mat['ml_analyzedTB']
 
@@ -34,10 +43,12 @@ class Lab:
 
         return [new_dates, new_classes, new_mL]
     
+
     def convertFromKudela(self, mat):
         classes = mat['class2useTB']
         new_classes = [item[0][0] for item in classes]
         return new_classes
+
 
     def load_data(self, start_date=None, week=None):
         '''
@@ -110,6 +121,7 @@ class Lab:
                 seconds = 86400*daynum + 3600*int(time[0]) + 60*int(time[1]) + int(time[2])
                 entry['name'] = seconds
                 entry['timestamp'] = self.matlab2datetime(timestamps[f][0]).strftime("%m/%d/%Y, %H:%M:%S")
+                entry['datenum'] = timestamps[f][0]
                 entry['Total'] = sum(final_counts)
                 weekcounts += [entry]
                 seconds_ticks += [86400*daynum]
@@ -121,8 +133,9 @@ class Lab:
 
         return data
 
+
     def load_warnings(self):
-        '''Load most recent warnings'''
+        '''Load warnings from the last 24 hours'''
 
         files = [f for f in os.listdir(f'summary/{self.data_path}') if 'summary' in f]
         mat = scipy.io.loadmat(f'summary/{self.data_path}/{max(files)}')
@@ -142,18 +155,19 @@ class Lab:
         indices = [i for i in range(len(self.classes)) if self.classes[i] in self.hab_thresholds.keys()]
         classcount = (mat['classcountTB'][:, indices] / self.mL) * 1000
 
-        data = self.wrap_data(int(self.dates[len(self.dates)-1,0]), int(self.dates[len(self.dates)-1,0]), classcount, self.hab_thresholds.keys())
-
+        today = self.datetime2matlab(dt.datetime.now())
+        data = self.wrap_data(int(self.dates[len(self.dates)-2,0]), int(self.dates[len(self.dates)-1,0]), classcount, self.hab_thresholds.keys())
         warnings = []
-
         for name,threshold in self.hab_thresholds.items():
-            counts = [d[name] for d in data['counts'] if d[name] > threshold]
+            counts = [d[name] for d in data['counts'] if (d['datenum'] > today - 1) and (d[name] > threshold)]
             if counts:
                 warnings.append(name)
 
         warningPackage = {
+            'hasWarning': bool(warnings),
             'warnings': warnings,
             'date': self.matlab2datetime(int(self.dates[len(self.dates)-1,0])).strftime("%m/%d/%Y"),
+            'recent': any([d for d in data['counts'] if (d['datenum'] > today - 1)])
         }
 
         return warningPackage

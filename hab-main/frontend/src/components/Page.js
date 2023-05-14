@@ -19,6 +19,8 @@ class Page extends React.Component {
           timekey: 1,
           showIndividuals: false,
           hideTotal: false,
+          hasWarning: false,
+          hasRecentData: false,
           warnings: [],
           warningDate: '',
           lastReportedData: '',
@@ -84,8 +86,10 @@ class Page extends React.Component {
                     resWarnings.splice(resWarnings.indexOf('Alexandrium_singlet'), 1, 'Alexandrium');
                 }
                 this.setState({
+                    hasWarning: res.data.hasWarning,
                     warnings: resWarnings,
-                    warningDate: res.data.date
+                    warningDate: res.data.date,
+                    hasRecentData: res.data.recent,
                 });
             })
 
@@ -183,13 +187,17 @@ class Page extends React.Component {
         return(
             <div>
                 <div className="header-banner">
-                    {this.state.warnings ? 
+                    {this.state.hasWarning ? 
                     <div className="warning-banner">
                         <p className="warning-species">{this.state.warnings.join(', ')}</p>
                         <p className="warnings">{`exceeded warning thresholds on ${this.state.warningDate} GMT`}</p>
                     </div> :
+                    this.state.hasRecentData ?
                     <div className="warning-banner">
-                        <p className="no-warnings">{`No HAB species exceeded warning thresholds as of ${this.state.warningDate} GMT`}</p>
+                        <p className="no-warnings">{`No HAB species exceeded warning thresholds in the last 24 hours.`}</p>
+                    </div> :
+                    <div className="warning-banner">
+                        <p className="no-warnings">{`No HAB data reported in the last 24 hours.`}</p>
                     </div>
                     }
                     <div className="last-reported-data">
