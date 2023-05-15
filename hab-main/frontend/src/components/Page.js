@@ -53,7 +53,9 @@ class Page extends React.Component {
                             ticks.push(day * 86400);
                         }
                     }
+                    
                     if (res.data.empties) {
+                        console.log('loading...');
                         for (let i = 0; i < counts.length; i++) {
                             Object.keys(counts[i]).forEach((key, index) => {
                                 if (counts[i][key] === 0) {
@@ -62,6 +64,7 @@ class Page extends React.Component {
                             })
                         }
                     }
+                    
                     this.setState({
                         counts: counts,
                         days: days,
@@ -124,6 +127,7 @@ class Page extends React.Component {
                     const days = res.data.days;
                     var ticks = res.data.seconds_ticks;
 
+                    /*
                     if (res.data.empties) {
                         for (let i = 0; i < counts.length; i++) {
                             Object.keys(counts[i]).forEach((key, index) => {
@@ -133,6 +137,8 @@ class Page extends React.Component {
                             })
                         }
                     }
+                    */
+
                     this.setState({
                         counts: counts,
                         days: days,

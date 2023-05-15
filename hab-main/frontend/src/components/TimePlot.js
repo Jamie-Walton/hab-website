@@ -119,9 +119,13 @@ class TimePlot extends React.Component {
         if (name === "Alexandrium_singlet") {
             displayName = "Alexandrium";
         }
-        return (
-            <p className="desc">{`${displayName.replace("_", "-")}: ${((payload[0].payload[name]).toFixed(2))} c/L`}</p>
-        );
+        if (payload[0].payload[name] != null) {
+            return (
+                <p className="desc">{`${displayName.replace("_", "-")}: ${((payload[0].payload[name]).toFixed(2))} c/L`}</p>
+            );
+        } else {
+            return;
+        }
       }
 
       renderLine(name, i) {
