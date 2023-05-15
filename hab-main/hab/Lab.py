@@ -111,6 +111,7 @@ class Lab:
             same_day_indices = np.where(np.floor(self.dates)==day)[0]
             timestamps = self.dates[same_day_indices, :]
             day_count = classcount[same_day_indices, :]
+            seconds_ticks += [86400*daynum]
 
             for f in range(len(day_count)):
                 file = day_count[f]
@@ -124,7 +125,7 @@ class Lab:
                 entry['datenum'] = timestamps[f][0]
                 entry['Total'] = sum(final_counts)
                 weekcounts += [entry]
-                seconds_ticks += [86400*daynum]
+
         data = {'counts': weekcounts,
                 'empties': empties,
                 'days': day_strings,
