@@ -55,14 +55,7 @@ class Page extends React.Component {
                     }
                     
                     if (res.data.empties) {
-                        console.log('loading...');
-                        for (let i = 0; i < counts.length; i++) {
-                            Object.keys(counts[i]).forEach((key, index) => {
-                                if (counts[i][key] === 0) {
-                                    counts[i][key] = null;
-                                }
-                            })
-                        }
+                        this.removeEmpties(counts);
                     }
                     
                     this.setState({
@@ -118,6 +111,16 @@ class Page extends React.Component {
         this.loadData(week);
     }
 
+    removeEmpties(counts) {
+        for (let i = 0; i < counts.length; i++) {
+            if (Object.values(counts[i]).slice(0, this.state.habList.length).every(count => count == 0)) {
+                Object.keys(counts[i]).forEach((key, index) => {
+                    counts[i][key] = null;
+                })
+            }
+        }
+    }
+
     loadDateRange(start, end) {
         try {
             axios
@@ -127,17 +130,9 @@ class Page extends React.Component {
                     const days = res.data.days;
                     var ticks = res.data.seconds_ticks;
 
-                    /*
                     if (res.data.empties) {
-                        for (let i = 0; i < counts.length; i++) {
-                            Object.keys(counts[i]).forEach((key, index) => {
-                                if (counts[i][key] === 0) {
-                                    counts[i][key] = null;
-                                }
-                            })
-                        }
+                        this.removeEmpties(counts);
                     }
-                    */
 
                     this.setState({
                         counts: counts,
