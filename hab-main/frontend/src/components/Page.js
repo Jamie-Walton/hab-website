@@ -69,7 +69,6 @@ class Page extends React.Component {
                         weekName: `${days[0]} to ${days[6]}`,
                         timekey: this.state.timekey + 1,
                         });
-
                     });
         } catch {
             console.log();

@@ -113,6 +113,9 @@ class Lab:
             day_count = classcount[same_day_indices, :]
             seconds_ticks += [86400*daynum]
 
+            if len(day_count) == 0:
+                empties = True
+
             for f in range(len(day_count)):
                 file = day_count[f]
                 final_counts = np.ndarray.tolist(file)
