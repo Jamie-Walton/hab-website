@@ -12,6 +12,7 @@ class App extends Component {
           <Routes>
               <Route exact path='/' element={<KudelaLab/>} />
               <Route path='/humboldt' element={<HumboldtLab/>} />
+              <Route path='/Humboldt' element={<HumboldtLab/>} />
           </Routes>
       </Router>
     );
