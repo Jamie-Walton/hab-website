@@ -1,17 +1,19 @@
 {
   "files": {
-    "main.css": "/static/css/main.ab07f7b9.css",
-    "main.js": "/static/js/main.14a9fce9.js",
-    "static/js/787.cda612ba.chunk.js": "/static/js/787.cda612ba.chunk.js",
+    "main.css": "/static/css/main.1128a743.css",
+    "main.js": "/static/js/main.8a08dc5c.js",
+    "static/js/111.c73bccda.chunk.js": "/static/js/111.c73bccda.chunk.js",
     "static/media/logo.png": "/static/media/logo.f2a3489c91b2f23e5616.png",
     "static/media/logo-white.png": "/static/media/logo-white.d54e1817b2c91ee35fd0.png",
+    "static/media/CalPolyHumboldtTelonicherMarineLab_Logo.png": "/static/media/CalPolyHumboldtTelonicherMarineLab_Logo.ec714571361e304f1d45.png",
+    "static/media/CalPolyHumboldt_primary_green.png": "/static/media/CalPolyHumboldt_primary_green.4f0a4d0ff7a1ca0e624a.png",
     "index.html": "/index.html",
-    "main.ab07f7b9.css.map": "/static/css/main.ab07f7b9.css.map",
-    "main.14a9fce9.js.map": "/static/js/main.14a9fce9.js.map",
-    "787.cda612ba.chunk.js.map": "/static/js/787.cda612ba.chunk.js.map"
+    "main.1128a743.css.map": "/static/css/main.1128a743.css.map",
+    "main.8a08dc5c.js.map": "/static/js/main.8a08dc5c.js.map",
+    "111.c73bccda.chunk.js.map": "/static/js/111.c73bccda.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.ab07f7b9.css",
-    "static/js/main.14a9fce9.js"
+    "static/css/main.1128a743.css",
+    "static/js/main.8a08dc5c.js"
   ]
 }

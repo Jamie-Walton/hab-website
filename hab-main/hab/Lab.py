@@ -88,16 +88,18 @@ class Lab:
         
         indices = [i for i in range(len(self.classes)) if self.classes[i] in self.hab_list]
         self.classcount = (mat['classcountTB'][:, indices] / self.mL) * 1000
+        sample_total = ((mat['classcountTB'] / self.mL) * 1000).sum(axis=1).round(0)
+        
+        return (start_date, self.classcount, sample_total)
 
-        return (start_date, self.classcount)
 
-
-    def wrap_data(self, start_date, end_date, classcount, hab_list):
+    def wrap_data(self, start_date, end_date, classcount, hab_list, sample_total):
         ''''Parse data for frontend-deliverable time series usage'''
 
         weekcounts = []
         empties = False
         days = range(start_date, end_date+1)
+        
         day_strings = []
         seconds_ticks = []
         new_start = None
@@ -107,18 +109,23 @@ class Lab:
             day = days[daynum]
             day_strings += [self.matlab2datetime(day).strftime('%m/%d/%Y')]
             if (day_strings[0][6:10] != day_strings[len(day_strings)-1][6:10]) and not new_start:
-                [new_start, classcount] = self.load_data(start_date=day)
+                [new_start, classcount,sample_total] = self.load_data(start_date=day)
             same_day_indices = np.where(np.floor(self.dates)==day)[0]
             timestamps = self.dates[same_day_indices, :]
             day_count = classcount[same_day_indices, :]
+            day_total = sample_total[same_day_indices]
             seconds_ticks += [86400*daynum]
 
             if len(day_count) == 0:
                 empties = True
-
+            # Loop through each file that is in a given day
             for f in range(len(day_count)):
                 file = day_count[f]
                 final_counts = np.ndarray.tolist(file)
+                #
+                file_total = day_total[f]
+                # For calculating total 
+                # total_file = all_count[f]
                 entry = {name:float(count) for name, count in zip(hab_list, final_counts)}
                 time = self.matlab2datetime(timestamps[f][0]).strftime("%H:%M:%S").split(':')
 
@@ -126,7 +133,7 @@ class Lab:
                 entry['name'] = seconds
                 entry['timestamp'] = self.matlab2datetime(timestamps[f][0]).strftime("%m/%d/%Y, %H:%M:%S")
                 entry['datenum'] = timestamps[f][0]
-                entry['Total'] = sum(final_counts)
+                entry['Total'] = file_total
                 weekcounts += [entry]
 
         data = {'counts': weekcounts,
@@ -141,9 +148,7 @@ class Lab:
     def load_warnings(self):
         '''Load warnings from the last 24 hours'''
 
-        files = [f for f in os.listdir(f'summary/{self.data_path}') if 'summary' in f]
-        mat = scipy.io.loadmat(f'summary/{self.data_path}/{max(files)}')
-
+       
         files = [f for f in os.listdir(f'summary/{self.data_path}') if 'summary' in f]
         mat = scipy.io.loadmat(f'summary/{self.data_path}/{max(files)}')
         files = [f for f in files if f != max(files)]
@@ -158,9 +163,11 @@ class Lab:
 
         indices = [i for i in range(len(self.classes)) if self.classes[i] in self.hab_thresholds.keys()]
         classcount = (mat['classcountTB'][:, indices] / self.mL) * 1000
+        sample_total = ((mat['classcountTB'] / self.mL) * 1000).sum(axis=1).round(0)
+
 
         today = self.datetime2matlab(dt.datetime.now())
-        data = self.wrap_data(int(self.dates[len(self.dates)-2,0]), int(self.dates[len(self.dates)-1,0]), classcount, self.hab_thresholds.keys())
+        data = self.wrap_data(int(self.dates[len(self.dates)-2,0]), int(self.dates[len(self.dates)-1,0]), classcount, self.hab_thresholds.keys(), sample_total)
         warnings = []
         for name,threshold in self.hab_thresholds.items():
             counts = [d[name] for d in data['counts'] if (d['datenum'] > today - 1) and (d[name] > threshold)]

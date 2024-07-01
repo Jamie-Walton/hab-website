@@ -14,7 +14,6 @@ def make_labs():
             "Alexandrium_singlet": 0,
             "Dinophysis": 500,
             "Pseudo-nitzschia": 10000,
-            "Pennate": 10000,
         }
     )
 
@@ -30,7 +29,6 @@ def make_labs():
             "Alexandrium_singlet": 0,
             "Dinophysis": 500,
             "Pseudo-nitzschia": 10000,
-            "Pennate": 10000,
         }
     )
 
