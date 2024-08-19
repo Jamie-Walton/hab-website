@@ -10,7 +10,9 @@ class Lab:
         self.name = name.replace(" ", "")
         self.data_path = data_path
         self.hab_list = hab_list
-        self.display_list = [name.replace("-", "_") for name in hab_list]
+        # self.display_list = [name.replace("-", "_") for name in hab_list]
+        self.display_list = [name for name in hab_list]
+        
         self.hab_thresholds = hab_thresholds
         self.dates = []
         self.classes = []
@@ -47,6 +49,8 @@ class Lab:
     def convertFromKudela(self, mat):
         classes = mat['class2useTB']
         new_classes = [item[0][0] for item in classes]
+        new_classes = [nc if nc != "Pseudo-nitzschia" else "Pseudo_nitzschia" for nc in new_classes]
+
         return new_classes
 
 

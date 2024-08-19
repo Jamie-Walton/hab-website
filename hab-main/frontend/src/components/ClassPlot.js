@@ -27,8 +27,15 @@ class ClassPlot extends React.Component {
 
         return (
             <div>
+                {console.log(this.props.name)}
+                {console.log("Before")}
                 <h5>{this.props.name === "Alexandrium_singlet" ? "Alexandrium" : this.props.name.replace("_", "-")}</h5>
+                {console.log("After")}
+                {console.log(this.props.name)}
+                
+
                 <div id="plot">
+                    {console.log(this.props.name)}
                     <LineChart width={275} height={150} data={this.props.data} key={this.props.key} ref={(chart) => this.currentChart = chart}>
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis 
@@ -43,7 +50,7 @@ class ClassPlot extends React.Component {
                         </XAxis>
                         <YAxis key={this.props.key} label={{ value: 'Cell Count (c/L)', angle: -90, position: 'center' }} />
                         <Line type="monotone" className="line" dot={false} id={this.props.name} dataKey={this.props.name} isAnimationActive={false} stroke={this.state.colors[this.props.name]} strokeWidth={1} />
-                        <Line type="monotone" className="line" dot={false} id="Threshold" dataKey="Threshold" stroke={this.state.colors.Threshold} strokeWidth={2} dot={false}/>
+                        <Line type="monotone" className="line" dot={false} id="Threshold" dataKey="Threshold" stroke={this.state.colors.Threshold} strokeWidth={2}/>
                     </LineChart>
                     {this.props.days.length > 0 ?
                     <div className='day-axis mini'>

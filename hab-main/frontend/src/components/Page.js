@@ -72,6 +72,7 @@ class Page extends React.Component {
     }
     
     componentDidMount() {
+
         this.loadData(this.state.week);
         axios
             .get(`/load/warnings/${this.props.name}/`)
@@ -180,6 +181,7 @@ class Page extends React.Component {
                         ]
                         )
                     );
+                {console.log(averages)}
         } else {
             var averages = [];
         }
@@ -214,6 +216,8 @@ class Page extends React.Component {
                         endDate={this.state.days[this.state.days.length-1]}
                     />
                 <div className="daily-plot">
+                    {console.log(this.state.habList)}
+                    {console.log(this.state.thresholds)}
                     {(this.state.counts) ?
                     <TimePlot
                         habList={this.state.habList}
@@ -243,6 +247,8 @@ class Page extends React.Component {
                     </div>
                     <div className="thresholds-container">
                         <p className="thresholds-header">Thresholds</p>
+                        {/* {console.log(this.state.thresholds)} */}
+                        {/* {Object.keys(this.state.thresholds).map(key => console.log(this.state.thresholds, key))} */}
                         {Object.keys(this.state.thresholds).map(key => this.renderThreshold(this.state.thresholds, key))}
                     </div>
                 </div>
@@ -251,4 +257,4 @@ class Page extends React.Component {
     }
 }
 
-export default (Page);
+    export default (Page)

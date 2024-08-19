@@ -8,12 +8,12 @@ def make_labs():
         hab_list = [
             'Akashiwo', 'Alexandrium_singlet', 'Ceratium', 'Cochlodinium', \
             'Dinophysis', 'Lingulodinium', 'Pennate', 'Prorocentrum', \
-            'Pseudo-nitzschia'
+            'Pseudo_nitzschia'
         ], 
         hab_thresholds = {
             "Alexandrium_singlet": 0,
             "Dinophysis": 500,
-            "Pseudo-nitzschia": 10000,
+            "Pseudo_nitzschia": 10000,
         }
     )
 

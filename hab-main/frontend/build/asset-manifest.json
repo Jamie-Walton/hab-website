@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.1128a743.css",
-    "main.js": "/static/js/main.8a08dc5c.js",
+    "main.js": "/static/js/main.387881d0.js",
     "static/js/111.c73bccda.chunk.js": "/static/js/111.c73bccda.chunk.js",
     "static/media/logo.png": "/static/media/logo.f2a3489c91b2f23e5616.png",
     "static/media/logo-white.png": "/static/media/logo-white.d54e1817b2c91ee35fd0.png",
@@ -9,11 +9,11 @@
     "static/media/CalPolyHumboldt_primary_green.png": "/static/media/CalPolyHumboldt_primary_green.4f0a4d0ff7a1ca0e624a.png",
     "index.html": "/index.html",
     "main.1128a743.css.map": "/static/css/main.1128a743.css.map",
-    "main.8a08dc5c.js.map": "/static/js/main.8a08dc5c.js.map",
+    "main.387881d0.js.map": "/static/js/main.387881d0.js.map",
     "111.c73bccda.chunk.js.map": "/static/js/111.c73bccda.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.1128a743.css",
-    "static/js/main.8a08dc5c.js"
+    "static/js/main.387881d0.js"
   ]
 }
