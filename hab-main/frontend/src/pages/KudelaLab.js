@@ -25,7 +25,7 @@ class KudelaLab extends React.Component {
                     <div>
                         <h2 className="subheading footer-heading">Kudela Lab</h2>
                         <div className="footer-links">
-                            <a className="footer-link" target="_blank" href="http://akashiwo.oceandatacenter.ucsc.edu:8000/timeline?dataset=SCW">SCW IFCB Dashboard</a>
+                            <a className="footer-link" target="_blank" href="https://akashiwo.oceandatacenter.ucsc.edu:8888/timeline?dataset=SCW">SCW IFCB Dashboard</a>
                             <a className="footer-link" target="_blank" href="http://oceandatacenter.ucsc.edu/">Lab Website</a>
                         </div>
                         <p className='disclaimer'><b>Disclaimer:</b> We are providing these data as a service to interested parties. Our goal is to deliver a near-real time summary of potentially harmful algal species in the water.  Cell identification data are from an automated classifier.  The IDs and concentrations are not necessarily manually confirmed and there may be errors.</p>
